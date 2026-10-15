@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEXTEN - Institutional Governance & Multi-Sector Management</title>
+<style>
+  :root {
+    --color-orange: #fc591f;
+    --color-red: #e42f0e;
+    --color-purple: #692184;
+    --color-indigo: #40125a;
+    --color-plum: #290c3d;
+    --color-dark-bg: #030108;
+    --text-main: #ffffff;
+    --text-muted: #a0a5b5;
+    --glow-orange: rgba(252, 89, 31, 0.45);
+    --glow-purple: rgba(105, 33, 132, 0.45);
+    --hue-shift: 0deg;
+    --invert-val: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-dark-bg);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* Light Theme Override */
+  body.light-theme {
+    --color-dark-bg: #f4f5f8;
+    --text-main: #11081f;
+    --text-muted: #5e6475;
+    --glow-orange: rgba(252, 89, 31, 0.25);
+    --glow-purple: rgba(105, 33, 132, 0.2);
+  }
+
+  /* 1. Minimal Header */
+  #header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    background: rgba(3, 1, 8, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.8s ease, border-color 0.8s ease;
+  }
+
+  body.light-theme #header {
+    background: rgba(244, 245, 248, 0.65);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .header-left {
+    font-family: "Arial Black", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.08em;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .led-pulse {
+    width: 7px;
+    height: 7px;
+    background-color: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #10b981;
+    animation: ledPulse 2s infinite;
+  }
+
+  @keyframes ledPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 4px #10b981; }
+    50% { opacity: 0.3; box-shadow: 0 0 12px #10b981; }
+  }
+
+  /* SECTION 1: Quantum Space & Interactive Logo Puzzle */
+  .section-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #sec1Canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  #flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 8;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(252, 89, 31, 0.5) 30%, transparent 70%);
+    transition: opacity 0.15s ease-out;
+  }
+
+  #wrap1 {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+  }
+
+  /* Vector logo assembly, centered in the quantum space */
+  #heroLogoSvg {
+    position: relative;
+    z-index: 2;
+    width: min(52vmin, 380px);
+    height: min(52vmin, 380px);
+    overflow: visible;
+    filter: drop-shadow(0 0 22px var(--glow-orange)) drop-shadow(0 0 38px var(--glow-purple));
+  }
+
+  #brandContainer {
+    margin-top: 28px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* JEXTEN wordmark: heavy sans, WFA purple letters, X in WFA bright orange shine */
+  :root {
+    --wfa-purple-hi: #d98cf0;
+    --wfa-purple: #9a1fb5;
+    --wfa-purple-lo: #5a0a74;
+    --wfa-orange-hi: #ffd08a;
+    --wfa-orange: #fa8834;
+    --wfa-orange-lo: #d9560f;
+  }
+
+  #brandTitle {
+    margin: 0;
+    font-family: "Arial Black", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+    font-size: clamp(30px, 6vmin, 54px);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  #brandTitle span,
+  .jx-word span {
+    display: inline-block;
+    background: linear-gradient(170deg, var(--wfa-purple-hi) 0%, var(--wfa-purple) 48%, var(--wfa-purple-lo) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 8px rgba(190, 90, 225, 0.55));
+    transition: opacity 0.25s linear, transform 0.25s linear;
+  }
+
+  #brandTitle span.jx-x,
+  .jx-word span.jx-x {
+    background: linear-gradient(115deg, var(--wfa-orange-lo) 0%, var(--wfa-orange) 28%, var(--wfa-orange-hi) 46%, #ffffff 50%, var(--wfa-orange-hi) 54%, var(--wfa-orange) 72%, var(--wfa-orange-lo) 100%);
+    background-size: 260% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 8px rgba(250, 136, 52, 0.85)) drop-shadow(0 0 20px rgba(252, 89, 31, 0.55));
+    animation: jxShine 3.6s ease-in-out infinite;
+  }
+
+  @keyframes jxShine {
+    0%   { background-position: 130% 0; }
+    55%  { background-position: -30% 0; }
+    100% { background-position: -30% 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #brandTitle span.jx-x, .jx-word span.jx-x { animation: none; background-position: 50% 0; }
+  }
+
+  .divider-bar {
+    height: 3px;
+    width: 140px;
+    margin: 10px auto;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-orange), var(--color-purple), transparent);
+    box-shadow: 0 0 12px var(--glow-orange);
+  }
+
+  #brandSubtitle {
+    margin: 0;
+    font-size: clamp(10px, 1.5vmin, 12px);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    font-weight: 600;
+  }
+
+  .controls {
+    position: absolute;
+    bottom: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    z-index: 5;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    max-width: 92vw;
+  }
+
+  button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--text-main);
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  button:hover {
+    border-color: var(--color-orange);
+    color: var(--color-orange);
+    box-shadow: 0 0 14px var(--glow-orange);
+    transform: translateY(-2px);
+  }
+
+  button.active {
+    border-color: var(--color-orange);
+    background: rgba(252, 89, 31, 0.25);
+  }
+
+  /* SECTION 2: Hero Section (Locomotive Kinetic Stanza) */
+  #heroSection {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5vw;
+    background-color: #020005;
+    overflow: hidden;
+  }
+
+  #sec2Canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .kinetic-stanza {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vh;
+    width: 100%;
+  }
+
+  .kinetic-row {
+    font-size: clamp(32px, 6.8vmin, 86px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.85);
+    transition: all 0.15s cubic-bezier(0.1, 0.9, 0.2, 1);
+    cursor: default;
+  }
+
+  body.light-theme .kinetic-row {
+    -webkit-text-stroke: 1.5px rgba(17, 8, 31, 0.85);
+  }
+
+  .stripe-subtext {
+    margin-top: 5vh;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: clamp(10px, 1.4vmin, 13px);
+    letter-spacing: 0.35em;
+    color: var(--color-orange);
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 4px;
+    background: rgba(252, 89, 31, 0.05);
+    border: 1px solid rgba(252, 89, 31, 0.2);
+    box-shadow: 0 0 20px rgba(252, 89, 31, 0.1);
+  }
+
+  /* SECTION 3: Enterprise Capability Grid */
+  #capabilitySection {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 5vw 80px;
+    background-color: var(--color-dark-bg);
+    overflow: hidden;
+  }
+
+  .section3-header {
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .section3-tag {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    color: var(--color-orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: inline-block;
+    font-weight: 700;
+    padding: 4px 12px;
+    background: rgba(252, 89, 31, 0.08);
+    border: 1px solid rgba(252, 89, 31, 0.25);
+    border-radius: 20px;
+  }
+
+  .section3-title {
+    font-size: clamp(28px, 4.5vmin, 46px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--text-main);
+    background: linear-gradient(180deg, #ffffff 0%, #c0c6d8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1300px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 1024px) {
+    .capability-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .capability-card-wrapper {
+    background-color: transparent;
+    height: 440px;
+    perspective: 1200px;
+    cursor: pointer;
+  }
+
+  .capability-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+  }
+
+  .capability-card-wrapper:hover .capability-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .card-front {
+    background: linear-gradient(145deg, rgba(20, 10, 32, 0.85) 0%, rgba(8, 4, 16, 0.95) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(145deg, rgba(26, 8, 38, 0.96) 0%, rgba(10, 3, 18, 0.98) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(252, 89, 31, 0.5);
+    box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.8), 0 0 35px var(--glow-orange);
+  }
+
+  body.light-theme .card-front {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(235, 238, 245, 0.95) 100%);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  }
+
+  body.light-theme .card-back {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 243, 250, 0.98) 100%);
+    border-color: var(--color-orange);
+    box-shadow: 0 20px 40px rgba(252, 89, 31, 0.2);
+  }
+
+  .capability-card-wrapper:hover .card-front {
+    border-color: rgba(252, 89, 31, 0.5);
+    box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.8), 0 0 30px var(--glow-orange);
+  }
+
+  .card-mono-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .card-mono-idx {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--color-orange);
+  }
+
+  .card-badge {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px 0;
+    color: var(--text-main);
+  }
+
+  .card-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .card-back-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 14px;
+    border-left: 2px solid var(--color-orange);
+    text-align: left;
+  }
+
+  .spec-title {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-orange);
+  }
+
+  .spec-text {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--text-main);
+    font-weight: 400;
+    margin: 0;
+    opacity: 0.95;
+  }
+
+  .card-status {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  body.light-theme .card-status {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .card-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--color-orange);
+    box-shadow: 0 0 8px var(--color-orange);
+  }
+
+  /* SECTION 4: The Manifesto Block & Continuous Auto-Play Client Carousel */
+  #manifestoSection {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 140px 6vw 80px;
+    background: radial-gradient(circle at 50% 30%, #0d041a 0%, #030108 80%);
+    overflow: hidden;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  body.light-theme #manifestoSection {
+    background: radial-gradient(circle at 50% 30%, #ffffff 0%, #f0f2f8 80%);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .manifesto-container {
+    max-width: 1180px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin: auto 0;
+  }
+
+  .manifesto-tag {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    color: var(--color-orange);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 32px;
+    display: inline-block;
+  }
+
+  .manifesto-text {
+    font-size: clamp(32px, 5.2vmin, 58px);
+    font-weight: 800;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+    color: var(--text-main);
+    margin: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #a8b0c6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  body.light-theme .manifesto-text {
+    background: linear-gradient(180deg, #11081f 0%, #4a3e5e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Continuous Auto-Play Client Logo Infinite Carousel */
+  .carousel-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin-top: 90px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    padding: 24px 0;
+    mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  }
+
+  .carousel-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    gap: 40px;
+    animation: infiniteScroll 42s linear infinite;
+  }
+
+  .carousel-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes infiniteScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .client-logo-card {
+    height: 65px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  body.light-theme .client-logo-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .client-logo-card:hover {
+    border-color: rgba(252, 89, 31, 0.4);
+    box-shadow: 0 0 20px rgba(252, 89, 31, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .client-placeholder {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .client-logo-card:hover .client-placeholder {
+    color: var(--color-orange);
+  }
+
+  .client-logo-card img {
+    max-height: 38px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
+    transition: all 0.3s ease;
+  }
+
+  body.light-theme .client-logo-card img {
+    filter: none;
+    opacity: 0.9;
+  }
+
+  .client-logo-card:hover img {
+    filter: none;
+    opacity: 1;
+  }
+
+  /* SECTION 5: Governance & Institutional Framework */
+  #governanceSection {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 6vw;
+    background-color: var(--color-dark-bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  body.light-theme #governanceSection {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .governance-header {
+    text-align: center;
+    margin-bottom: 70px;
+  }
+
+  .governance-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1240px;
+    width: 100%;
+  }
+
+  @media (max-width: 900px) {
+    .governance-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .gov-column {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.005) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.3s ease;
+  }
+
+  body.light-theme .gov-column {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 243, 250, 0.9) 100%);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .gov-column:hover {
+    border-color: rgba(252, 89, 31, 0.35);
+  }
+
+  .gov-col-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    color: var(--text-main);
+  }
+
+  .gov-col-subtitle {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--color-orange);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: block;
+    font-weight: 700;
+  }
+
+  .gov-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .gov-list li {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .gov-list li::before {
+    content: '■';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    color: var(--color-orange);
+    font-size: 10px;
+  }
+
+  .gov-list li strong {
+    color: var(--text-main);
+    font-weight: 700;
+  }
+
+  .gov-metric-bar {
+    display: flex;
+    gap: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  body.light-theme .gov-metric-bar {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .metric-box {
+    flex: 1;
+  }
+
+  .metric-val {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--color-orange);
+    line-height: 1;
+    margin-bottom: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .metric-lbl {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* SECTION 6: Corporate Footer & Seal */
+  #corporateFooter {
+    position: relative;
+    width: 100vw;
+    background-color: #010003;
+    color: var(--text-muted);
+    padding: 80px 6vw 48px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  body.light-theme #corporateFooter {
+    background-color: #110d18;
+    color: #9398a8;
+  }
+
+  /* JEXTEN Footer Mark — real vector logo, blended into the dark footer field */
+  .footer-seal {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 32px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .footer-seal::before {
+    content: '';
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(252, 89, 31, 0.22) 0%, rgba(105, 33, 132, 0.16) 45%, transparent 72%);
+    filter: blur(6px);
+    z-index: 0;
+  }
+
+  .footer-seal img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 10px rgba(252, 89, 31, 0.4)) drop-shadow(0 0 18px rgba(105, 33, 132, 0.35));
+    opacity: 0.96;
+  }
+
+  /* Footer stays on the dark field in both themes (#corporateFooter background
+     is dark even under body.light-theme), so the screen-blend above holds. */
+
+  .footer-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .footer-legal-notice {
+    max-width: 860px;
+    font-size: 11.5px;
+    line-height: 1.8;
+    color: #727788;
+    margin: 0 0 32px 0;
+    font-weight: 400;
+  }
+
+  .footer-divider {
+    width: 80px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin: 0 auto 28px;
+  }
+
+  .footer-copy {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #525666;
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. Minimal Header -->
+<header id="header">
+  <div class="header-left jx-word" aria-label="JEXTEN"><span>J</span><span>E</span><span class="jx-x">X</span><span>T</span><span>E</span><span>N</span></div>
+  <div class="header-right">
+    <div class="led-pulse"></div>
+    <span>EST. 2000 • GLOBAL HOLDINGS</span>
+  </div>
+</header>
+
+<div id="flash"></div>
+
+<!-- SECTION 1: Quantum Space — Logo Assembly, centered -->
+<section class="section-container" id="logoSection">
+  <canvas id="sec1Canvas"></canvas>
+
+  <div id="wrap1">
+    <svg id="heroLogoSvg" viewBox="0 0 2048 2048" role="img" aria-label="JEXTEN logo">
+      <g id="heroLogoG">
+        <g id="heroParts"></g>
+        <circle id="heroSurge" cx="1024" cy="1024" r="10" fill="none" stroke="#fff" stroke-width="10" opacity="0"/>
+      </g>
+    </svg>
+
+    <div id="brandContainer">
+      <h1 id="brandTitle">JEXTEN</h1>
+      <div class="divider-bar" id="heroBar"></div>
+      <p id="brandSubtitle">Digital Transformation & Infrastructure</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btnHeroToggle">Pause</button>
+    <button id="btnHeroReplay">Replay</button>
+    <button id="btnTheme">Toggle Theme</button>
+  </div>
+</section>
+
+<!-- SECTION 2: Hero Section (Locomotive Kinetic Stanza) -->
+<section id="heroSection">
+  <canvas id="sec2Canvas"></canvas>
+
+  <div class="hero-content">
+    <div class="kinetic-stanza" id="kineticStanza">
+      <div class="kinetic-row">SEIZE OPPORTUNITY</div>
+      <div class="kinetic-row">DRIVE INNOVATION</div>
+      <div class="kinetic-row">EMPOWER YOUTH</div>
+      <div class="kinetic-row">CHAMPION PROBITY</div>
+    </div>
+
+    <div class="stripe-subtext">
+      [ JEXTEN HOLDINGS — INSTITUTIONAL GOVERNANCE & MULTI-SECTOR MANAGEMENT ]
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: Enterprise Capability Grid (Elite Interactive Flip Cards) -->
+<section id="capabilitySection">
+  <div class="section3-header">
+    <span class="section3-tag">INSTITUTIONAL PILLARS</span>
+    <h2 class="section3-title">Enterprise Capability Grid</h2>
+  </div>
+
+  <div class="capability-grid">
+    
+    <!-- Card 1: Digital Architecture & Systems -->
+    <div class="capability-card-wrapper">
+      <div class="capability-card-inner">
+        <!-- Front -->
+        <div class="card-front">
+          <div>
+            <div class="card-mono-header">
+              <span class="card-mono-idx">01 / SYSTEMS</span>
+              <span class="card-badge">CORE CAPABILITY</span>
+            </div>
+            <h3 class="card-title">Digital Architecture & Systems</h3>
+            <p class="card-desc">High-performance digital ecosystems and principal engineering governance.</p>
+          </div>
+          <div class="card-status">
+            <span class="card-status-dot"></span> HOVER TO REVEAL STRATEGY
+          </div>
+        </div>
+        <!-- Back (Hover Flip) -->
+        <div class="card-back">
+          <div>
+            <div class="card-mono-header">
+              <span class="card-mono-idx">01 / SPECIFICATIONS</span>
+              <span class="card-badge">EXECUTIVE DISPLAY</span>
+            </div>
+            <div class="card-back-content">
+              <div class="spec-item">
+                <span class="spec-title">Strategic Growth</span>
+                <p class="spec-text">Architecting high-performance ecosystems that eliminate technical debt and accelerate time-to-market.</p>
+              </div>
+              <div class="spec-item">
+                <span class="spec-title">Risk & Governance</span>
+                <p class="spec-text">Enforcing principal engineering governance to secure and future-proof enterprise assets.</p>
+              </div>
+              <div class="spec-item">
+                <span class="spec-title">Procurement Alignment</span>
+                <p class="spec-text">Delivering predictable cost scaling, strict SLA compliance, and seamless multi-system integration.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-status">
+            <span class="card-status-dot"></span> ARCHITECTURE VERIFIED
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Industrial Commodity & Trade -->
+    <div class="capability-card-wrapper">
+      <div class="capability-card-inner">
+        <!-- Front -->
+        <div class="card-front">
+          <div>
+            <div class="card-mono-header">
+              <span class="card-mono-idx">02 / COMMODITIES</span>
+              <span class="card-badge">GLOBAL TRADE</span>
+            </div>
+            <h3 class="card-title">Industrial Commodity & Trade</h3>
+            <p class="card-desc">Cross-border biomass supply corridors and expert port logistics.</p>
+          </div>
+          <div class="card-status">
+            <span class="card-status-dot"></span> HOVER TO REVEAL STRATEGY
+          </div>
+        </div>
+        <!-- Back (Hover Flip) -->
+        <div class="card-back">
+          <div>
+            <div class="card-mono-header">
+              <span class="card-mono-idx">02 / SPECIFICATIONS</span>
+              <span class="card-badge">EXECUTIVE DISPLAY</span>
+            </div>
+            <div class="card-back-content">
+              <div class="spec-item">
+                <span class="spec-title">Supply Chain Resilience</span>
+                <p class="spec-text">Securing cross-border biomass corridors to protect business continuity against market volatility.</p>
+              </div>
+              <div class="spec-item">
+                <span class="spec-title">ESG & Sustainability</span>
+                <p class="spec-text">Advancing corporate sustainability mandates through transparent, green energy sourcing.</p>
+              </div>
+              <div class="spec-item">
+                <span class="spec-title">Frictionless Logistics</span>
+                <p class="spec-text">Ensuring 100% IEC compliance and expert port logistics to eliminate customs bottlenecks.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-status">
+            <span class="card-status-dot"></span> SUPPLY CHAIN ACTIVE
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Human Capital, and Global Trade -->
+    <div class="capability-card-wrapper">
+      <div class="capability-card-inner">
+        <!-- Front -->
+        <div class="card-front">
+          <div>
+            <div class="card-mono-header">
+              <span class="card-mono-idx">03 / HUMAN CAPITAL</span>
+              <span class="card-badge">WORKFORCE</span>
+            </div>
+            <h3 class="card-title">Human Capital, and Global Trade</h3>
+            <p class="card-desc">Compliant workforce transformation and scalable RPO deployment.</p>
+          </div>
+          <div class="card-status">
+            <span class="card-status-dot"></span> HOVER TO REVEAL STRATEGY
+          </div>
+        </div>
+        <!-- Back (Hover Flip) -->
+        <div class="card-back">
+          <div>
+            <div class="card-mono-header">
+              <span class="card-mono-idx">03 / SPECIFICATIONS</span>
+              <span class="card-badge">EXECUTIVE DISPLAY</span>
+            </div>
+            <div class="card-back-content">
+              <div class="spec-item">
+                <span class="spec-title">Agile Transformation</span>
+                <p class="spec-text">Aligning workforce transformation strategies directly with long-term corporate valuation.</p>
+              </div>
+              <div class="spec-item">
+                <span class="spec-title">Turnkey Delivery</span>
+                <p class="spec-text">Deploying customized talent pipelines via scalable Recruitment Process Outsourcing (RPO).</p>
+              </div>
+              <div class="spec-item">
+                <span class="spec-title">Vetted Compliance</span>
+                <p class="spec-text">Minimizing vendor footprint while neutralizing co-employment and regulatory risks.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-status">
+            <span class="card-status-dot"></span> GOVERNANCE SECURED
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 4: The Manifesto Block & Continuous Auto-Play Client Carousel -->
+<section id="manifestoSection">
+  <div class="manifesto-container">
+    <span class="manifesto-tag">// OPERATIONAL MANIFESTO</span>
+    <h2 class="manifesto-text">
+      "JEXTEN operates at the intersection of enterprise velocity and uncompromising ethical governance. We do not merely manage enterprise assets—we scale human potential, engineer resilient systems, and champion probity across global markets."
+    </h2>
+  </div>
+
+  <!-- Auto Play Continuous Loop Client Logo Carousel -->
+  <!-- IMPORTANT: Populate this with YOUR verified client logos only, with their permission.
+       Placeholder sector badges are shown below until real, approved logos are supplied. -->
+  <div class="carousel-wrapper">
+    <div class="carousel-track">
+      <div class="client-logo-card"><span class="client-placeholder">BFSI</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">IT &amp; ITES</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Manufacturing</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Logistics</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Energy &amp; Trade</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Retail</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Healthcare</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Public Sector</span></div>
+
+      <!-- Duplicated Set for Infinite Loop -->
+      <div class="client-logo-card"><span class="client-placeholder">BFSI</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">IT &amp; ITES</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Manufacturing</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Logistics</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Energy &amp; Trade</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Retail</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Healthcare</span></div>
+      <div class="client-logo-card"><span class="client-placeholder">Public Sector</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: Governance & Institutional Framework -->
+<section id="governanceSection">
+  <div class="section3-header governance-header">
+    <span class="section3-tag">STATUTORY AUDIT & COMPLIANCE</span>
+    <h2 class="section3-title">Governance & Institutional Framework</h2>
+  </div>
+
+  <div class="governance-grid">
+    <!-- Left Column: The Philosophy of Probity -->
+    <div class="gov-column">
+      <div>
+        <h3 class="gov-col-title">The Philosophy of Probity</h3>
+        <span class="gov-col-subtitle">// STATUTORY COMPLIANCE & LEGAL ETHICS</span>
+
+        <ul class="gov-list">
+          <li><strong>Zero-Compromise Legal Ethics:</strong> Full alignment with international statutory mandates, anti-bribery regulations, and fiscal audit transparency.</li>
+          <li><strong>Transparent Operational SLAs:</strong> Binding enterprise commitments with measurable metrics for multi-sector asset management and logistics execution.</li>
+          <li><strong>Institutional Risk Neutralization:</strong> Continuous legal oversight protecting global banking partners, investors, and stakeholders against systemic risk exposure.</li>
+        </ul>
+      </div>
+
+      <div class="gov-metric-bar">
+        <div class="metric-box">
+          <div class="metric-val">100%</div>
+          <div class="metric-lbl">Statutory Compliance</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">ZERO</div>
+          <div class="metric-lbl">Co-Employment Risk</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Next-Generation Empowerment -->
+    <div class="gov-column">
+      <div>
+        <h3 class="gov-col-title">Next-Generation Empowerment</h3>
+        <span class="gov-col-subtitle">// CAPACITY BUILDING & EXPANSION</span>
+
+        <ul class="gov-list">
+          <li><strong>Youth Capacity Building:</strong> Quantitative initiatives for technology upskilling, leadership development, and employment generation.</li>
+          <li><strong>Global Corridor Expansion:</strong> Deploying strategic cross-border trade networks across North America, Europe, and Asia-Pacific markets.</li>
+          <li><strong>Sustainable Capital Deployment:</strong> Directing resources toward green trade corridors and resilient industrial supply infrastructure.</li>
+        </ul>
+      </div>
+
+      <div class="gov-metric-bar">
+        <div class="metric-box">
+          <div class="metric-val">15+</div>
+          <div class="metric-lbl">Global Markets</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">25K+</div>
+          <div class="metric-lbl">Talent Upskilled</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: Corporate Footer & Seal -->
+<footer id="corporateFooter">
+  <!-- JEXTEN Footer Mark (real vector logo, blended into the dark field) -->
+  <div class="footer-seal">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDQ4IiBoZWlnaHQ9IjIwNDgiIHZpZXdCb3g9IjAgMCAyMDQ4IDIwNDgiPgo8cGF0aCBmaWxsPSIjZmM1OTFmIiBkPSJNMTA5MC45NyAxMTMuNzIzYy00LjQ3LTUuMTkyLTguMzktOS41OTUtMTMuMTYtMTQuNTAyIDE4LjA4IDEuNTE5IDMxLjQ1IDEuODEgNTAuMTcgNC4xMjVsMy4xNS40NTEgMTEuOTkuMjg5IDU1Ny45MSA2MzQuNDA0IDE4My45NCAyMDkuNjE4YzI5LjE0IDMzLjE0OCA2MC4yMyA2Ny4zNDIgODguNjkgMTAwLjc2Mi0xLjM1IDEuNTQtMTEuMTEgMTIuNzgtMTIuMDEgMTMuNS0yLjk4IDQuMi0xMS44NiAxMy44Ny0xNS41NyAxOC4xMmwtMzAuNDMgMzQuODQtMTExLjM0IDEyNS45Ny0zNDUuNzMgMzkwLjg3LTIyMC4xNCAyNTEuODgtNTcuOTggNjYuNGMtNi45OCA4LjEtMjQuNjIgMzAuNTItMzEuNTYgMzUuNS0xNC4wNSAxMC4wOC01NS40MiA4LjU2LTczLjY2IDEyLjU0bDQ5OC41My01NjguNzkgMjEzLjY0LTI0My4wMmM0MS4wNC00Ni4yOSA4MS43OS05Mi44MiAxMjIuMjctMTM5LjYxbC01LjEtNS45NWMtMTQuMTEtMTUuNjItMzMuNDYtMzcuMi00Ni4yMS01My42MDItNC40NS0zLjA1OS05Mi42My0xMDQuNTk5LTkzLjY5LTEwNi40NzEtNS42Ny01LjEyNi0yMC40NS0yMi40Ny0yNS41LTI4LjgwMS0yLjE5LTEuNjAxLTIxLjIyLTIzLjMwMi0yNC41Mi0yNy4yLTIwLjU2LTI0LjI1LTQ1LjQzLTQ5LjYzOS02NS4wNS03NC4zNTMtNy4zMy02Ljc1Ni0yMy42My0yNi41MDgtMzAuNDYtMzQuNDExLTMuNzEtMi42MzktMzUuMDItMzkuMjY3LTM5LjkxLTQ0Ljk3Mi02LjM4LTYuOTMtMTQuNy0xNS43MzktMjAuMjMtMjMuMTQ0LTMuNjYtMi4xNC0xMzQuNjgtMTUyLjU5Ni0xNDcuMjMtMTY4LjEwOWE1MDAgNTAwIDAgMCAxLTE5LjI5LTIxLjcxOWMtMi42OC0xLjk5NC0xNS4xNC0xNi42LTE3Ljg5LTE5LjkyMy0yNC40My0yOS41NzItNTIuOC01OC4wMDItNzYuNzYtODcuNzA2LTcuMTYtNy4zNi0xNi42NS0xOC44NDQtMjMuMjItMjYuODEtNi44OC01Ljk5OC0xNy43NS0xOS40NjEtMjMuODItMjYuODg0LTYuNTgtNi45MjktMTMuMDUtMTQuODU4LTE5LjI2LTIyLjE4NC03LjIxLTYuNzYzLTM5LjE3LTQzLjY2Mi00NC42LTUxLjEwMy0xNC4yNy0xNC44NzUtMzMuNjUtMzcuNDgzLTQ2Ljc5LTUzLjM5OC0yLjYxLTIuMTUzLTE5LjQ4LTIxLjc5NS0yMi4zLTI1LjI4MS03LjY4LTkuNTAyLTE5LjkzLTIxLjkzNi0yNi44OC0zMS4zMjYiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJtMTEzMS4xMyAxMDMuNzk3IDExLjk5LjI4OSA1NTcuOTEgNjM0LjQwNCAxODMuOTQgMjA5LjYxOGMyOS4xNCAzMy4xNDggNjAuMjMgNjcuMzQyIDg4LjY5IDEwMC43NjItMS4zNSAxLjU0LTExLjExIDEyLjc4LTEyLjAxIDEzLjVsLS41MS0uNWMuMDYtMi4xMSA3LjMyLTEwLjUyIDkuMTctMTIuODctNy40Ni0xMC4wOC0yMC43NC0yMy45MS0yOS4zOC0zMy44MmwtNjguNjktNzguMjI5LTI0MS40LTI3NS4zOTNhMjgzMjMgMjgzMjMgMCAwIDAtMjM2LjUtMjY4Ljk1MWMtMzEuODYtMzYuMDc1LTYyLjY3LTcyLjE1OC05NC45NC0xMDcuOTk2bC0xMjAuNDEtMTM2LjM4MmExMTQxIDExNDEgMCAwIDEtMjEuNDMtMjQuMjUxYy00LjEtNC44NDEtOS4xLTEwLjkyOC0xMy4yNC0xNS42ODEtMy4yOS0zLjc2OC03Ljk1LjIxNi0xMy4xOS00LjVtOS4wMiA2Ni41MzNjNC45OCAxLjAwNyA0Ni4xNSA0Ny40NDYgNDYuNzkgNTMuMzk4LTE0LjI3LTE0Ljg3NS0zMy42NS0zNy40ODMtNDYuNzktNTMuMzk4bTcxOC4yMiA4MTcuMTg4YzUuMTguNzg4IDQ2LjA3IDQ4LjU5MiA0Ni4yMSA1My42MDItMTQuMTEtMTUuNjItMzMuNDYtMzcuMi00Ni4yMS01My42MDJtLTc2Ny40LTg3My43OTVjLTQuNDctNS4xOTItOC4zOS05LjU5NS0xMy4xNi0xNC41MDIgMTguMDggMS41MTkgMzEuNDUgMS44MSA1MC4xNyA0LjEyNS05LjY5IDQuOTI2LTMyLjgzLTQuOTc4LTQwLjk4LS4yOS4yNiA0Ljg0MyAzLjg3IDYuMDM2IDMuOTcgMTAuNjY3bTUyOC4xOCA2MDIuNTU5YzYuODkgMi4xNzMgMjUuMzggMjUuMzQ2IDMwLjU3IDMxLjg3Mi4zMyAyLjA2OS41NyAxLjI1Ni0uMTEgMi41MzktNy4zMy02Ljc1Ni0yMy42My0yNi41MDgtMzAuNDYtMzQuNDExbS0zNDQuNTMtMzkyLjM4MyAxLjU3LS45MTdjNC44NyA1LjAwMiAyMS43MyAyMS42MDQgMjEuNjUgMjcuNzI3LTcuMTYtNy4zNi0xNi42NS0xOC44NDQtMjMuMjItMjYuODFtNDY0LjU2IDUyOC4zNDdjNi4zNyAxLjk5MSAyMy43OCAyMi4zNjMgMjUuNSAyOC44MDEtNS42Ny01LjEyNi0yMC40NS0yMi40Ny0yNS41LTI4LjgwMW0tNTA3LjY0LTU3Ny40MTUgMS43Mi0uNzAyYzUuMDggNC45OTMgMTcuMTUgMTUuODAzIDE3LjU0IDIyLjg4Ni02LjU4LTYuOTI5LTEzLjA1LTE0Ljg1OC0xOS4yNi0yMi4xODRtMzI3LjQ3IDM3My4zMzVjNS45NCAyLjg3NSAxOC4yOSAxNi4xMDMgMjEuMTMgMjEuODk5bC0uOSAxLjI0NWMtNi4zOC02LjkzLTE0LjctMTUuNzM5LTIwLjIzLTIzLjE0NG0tMTY2LjUyLTE4OS44MjhjNS45MyAxLjI4OSAxOC44MyAxNS43ODcgMTkuMjkgMjEuNzE5YTUwMCA1MDAgMCAwIDEtMTkuMjktMjEuNzE5Ij48L3BhdGg+PHBhdGggZmlsbD0iIzY5MjE4NCIgZD0iTTM3OS4xMTEgMzUyLjAwOWMtMi40MzcgNS40ODMtNC4yOTkgMTIuMTItNi4xMjUgMTcuOTA4LTMuMzMzIDE4LjI5Mi03LjQzMyAyOC43NTUtMTEuNTkzIDQ2LjEzN2ExMTM2IDExMzYgMCAwIDAtMTYuMzIxIDc5LjkyYy0xLjMwNyA3LjM2OS0yLjI1NiAxNC40OTEtMi4yMTYgMjEuOTg4LjEwOCAyMC4xMjgtNC45NDggMzkuMjkzLTYuOTEyIDU5LjE3OGE3NDQuNiA3NDQuNiAwIDAgMCAyOC44MTcgMjg4Ljc2OGM1Ljk5OSAyMC4xNjkgMTQuODQ5IDQwLjA4NCAyMS41NDkgNjAuMjAyIDEwLjMzIDIxLjU1MiAxOC4wODcgNDEuNTEzIDI5LjU1OCA2My4xOTZhNjgyLjUgNjgyLjUgMCAwIDAgNzAuOTg2IDEwNy42NDRjMTAuODkzIDEzLjU3IDIyLjE4NCAyNS42OCAzMy4xMTMgMzguOSAyLjYwNiAxLjg5IDE2LjI0MyAxNS41IDE4LjMyNCAxOC4xMSA4MS42MzIgNzguNDEgMTU5Ljc5NyAxMjcuNjcgMjY3LjAyNCAxNjIuNSAzMC44MzcgOC40NCA2MC4xMDggMTUuODUgOTIuMTEyIDE3LjgyIDQuMDE3LjI1IDExLjIxMy43MSAxNC45MDUgMS43MSAxMS40MjcuMDYgMjMuMjA4LjI5IDM0LjU5OS0uMTdsMS4zNzUgMS4yYTI0OSAyNDkgMCAwIDEtMzYuNjc2IDUuMjVsLTEuMTg5LjQ4Yy05Mi40ODkgNi40LTE4NC45MzYtMTUuODYtMjY5LjY3MS01MS44MS03LjA3OS0zLTEwLjkxNC00LjY2LTE1LjkzMy03LjM5YTQ5NiA0OTYgMCAwIDEtMzAuOTUxLTE0LjNjLTkuMDQ4LTMuODktMjIuNDQ5LTExLjY2LTMxLjE3MS0xNi40LTQ5Ljk2Mi0yNy4xOS05NC40MzEtNTkuODYtMTM1LjE4My05OS41My0xNC4xNjMtMTMuNzgtMjcuMjM5LTI1LjU3LTM5Ljc2LTQxLjU0LTI3LjE2Mi0yOS44OC03MC41MzQtODkuNDUtODkuNTM1LTEyNC45NTgtNTguNTMzLTk2LjU3Ni05NC4xMi0yMTcuNDMtMTEyLjM4OS0zMjguMjI0LTIuNTg3LTIxLjE3My0xMC44OC0zNC4zMzItLjExNC01NC41OCAzMS4xMDgtNTguNTA2IDY2Ljc1Ni0xMTYuNTQyIDExMS4xMjEtMTY2LjM1IDMuNjYzLTQuNTk3IDguMDEzLTkuMzcgMTEuOTIyLTEzLjgzNCAzLjI2NC00LjY2MiAxMS4yMzktMTMuMjA5IDE1LjQ0My0xNy4xNTIgMTMuMzgyLTE1LjYzIDM4LjkxNi00Mi4xMjcgNTQuODkxLTU0LjY3MyI+PC9wYXRoPjxwYXRoIGZpbGw9IiM0MDEyNWEiIGQ9Ik04MDUuMzE1IDEzMTYuNDZjLTguMDYzLjkzLTI0Ljg2LTYuMTMtMzMuMDgtOS4wMS03MC40NDEtMjQuNjgtMTM0LjgzOS02NS4wNy0xOTEuODQ0LTExMi44Ni03LjAwNS01Ljg3LTQxLjQ2LTMzLjkzLTQyLjEtNDAuNjMgODEuNjMyIDc4LjQxIDE1OS43OTcgMTI3LjY3IDI2Ny4wMjQgMTYyLjVtLTI4NS4zNDgtMTgwLjYxYy01LjkwOS0yLjM5LTE3Ljk5Ni0xNy4xOC0yMi42LTIyLjc5LTQyLjQ1My01MS43LTkwLjYzMi0xMjEuNjI4LTExMS45OTUtMTg1LjQ1N2wuOTM4LTEuNDkzYzEwLjMzIDIxLjU1MiAxOC4wODcgNDEuNTEzIDI5LjU1OCA2My4xOTZhNjgyLjUgNjgyLjUgMCAwIDAgNzAuOTg2IDEwNy42NDRjMTAuODkzIDEzLjU3IDIyLjE4NCAyNS42OCAzMy4xMTMgMzguOW0tMjIxLjczLTE0OS4wMjggMS41MzktLjYxM2MyMC4yNjQgMzQuOTMxIDQ0LjAzNCA2OC4xMTEgNjguOTQgOTkuODYxIDQuMDUgNS4xNiAxOC44OTggMjEuNTggMTkuMDU2IDI1LjcxLTI3LjE2Mi0yOS44OC03MC41MzQtODkuNDUtODkuNTM1LTEyNC45NTgiPjwvcGF0aD48cGF0aCBmaWxsPSIjMjkwYzNkIiBkPSJNMzc5LjExMSAzNTIuMDA5Yy0yLjQzNyA1LjQ4My00LjI5OSAxMi4xMi02LjEyNSAxNy45MDhsLTEuMjAyLS41NjdjLjQ5MS0zLjAxNiAxLjUzLTUuMzEuMzA0LTcuMjQ3LTYuODg1LjYwNy0zOS44NyA0Mi41NjctNDcuODY4IDQ0LjU3OSAxMy4zODItMTUuNjMgMzguOTE2LTQyLjEyNyA1NC44OTEtNTQuNjczbTUzMy4yMjEgOTgzLjk4MWMxMS40MjcuMDYgMjMuMjA4LjI5IDM0LjU5OS0uMTdsMS4zNzUgMS4yYTI0OSAyNDkgMCAwIDEtMzYuNjc2IDUuMjVjMy43MTYtMi4wOSA2LjIyNS0yLjQgMTAuNDI1LTMuNC0zLjQwNi0uOTEtNi4zNjYtMS44MS05LjcyMy0yLjg4Ij48L3BhdGg+PHBhdGggZmlsbD0iIzQwMTI1YSIgZD0iTTU5My44ODYgMTI2OS4yNWM1Ljc3My0uNjQgMjQuNTQzIDkuMjcgMzAuMDA0IDEyLjE0LjI5MS42Ljg0OCAxLjU4Ljk0NyAyLjE2YTQ5NiA0OTYgMCAwIDEtMzAuOTUxLTE0LjNNMzA4Ljc3NyA0MjMuODM0Yy4wNCA1LjIzMy01LjgzNSAxMy41MTctMTEuOTIyIDEzLjgzNCAzLjY2My00LjU5NyA4LjAxMy05LjM3IDExLjkyMi0xMy44MzQiPjwvcGF0aD48cGF0aCBmaWxsPSIjNjkyMTg0IiBkPSJNNDU3Ljc0NSAyODQuNzNjNjUuMjc0LTQ2LjEyNyAxMjkuMzkyLTg2LjA4NyAyMDMuODItMTE2LjE0MyAxOC43NjctNy41NzkgMzcuNzc3LTE0Ljc1OCA1Ni4zNzYtMjIuNjQ2LTIzLjI1OCAyNy4xNTgtMzguODA5IDUxLjIxOS01OC4zODcgODEuMTM1LTI0Ljg2MiA0NS4xNTgtNTQuNzI2IDg2Ljk1OS03NC44NDIgMTM1LjE5NC01LjAzOCAxMi4wODItOS40NTIgMjQuMzEzLTE0LjA5MSAzNi41MDVhODUwIDg1MCAwIDAgMC0zNi4wNTkgMTIzLjAyN2MtMjMuMTU3IDExNC4yNzEtMTMuMzIgMjUzLjI0NyAyMy44MzQgMzYzLjIwMiA0NS40NDggMTM2LjU4NiAxMzEuNjE3IDI0MC4wMzYgMjQ4LjY2IDMyMS40ODYgMTEuNDA3IDYuNTggMjEuOTA3IDEyLjg1IDMzLjYyOCAxOC45MyA0LjMwNCAyLjIzIDIwLjYwOSAxMC4wNyAyMy40MjEgMTIuMjFsLS41MTEgMS45Ny40MTUuNTMgMS45NzkuMjJjLTEuNTkyIDEuNzUtMS4xNDkgMS4yOS0zLjQ5OSAxLjMzbC0xLjI0OS43M2MtNDEuMDYxLTkuOTUtMTA3LjkxLTQyLjMzLTE0Mi4yNC02Ni40Ny0xMS4xMzgtNS45NS0zMS41NDktMjEuODEtNDEuMjItMjkuOTktMjUuODQ3LTIwLjU5LTQxLjM5MS0zNC4xNi02NC41MTQtNTcuNjgtMTIuMDMxLTkuNzItMzUuOS0zNy44NS00NS40NjUtNTAuNDUtMjYuMzA5LTMxLjI0LTU4Ljc5Mi03OS41MjgtNzcuNTczLTExNS42MzQtOS40Ny0xMy4zNjctMjAuODI0LTQzLjI1My0yNy43NDMtNTguOTA2LTEwLjA0Ny0yMi43MzEtMTcuNjYtNDguNzMyLTI1LjE2Ny03Mi40NTctMi44ODgtOS4xMjgtNi4wNS0xOC40MzYtOC40ODUtMjcuNy0yMy40NzctMTExLjI5NS0yNi41NjktMjMzLjAwOC05Ljg3OS0zNDUuNTk4IDMuOTA4LTI2LjM1OCAxMy4xNS01OS4yMyAxOS40ODMtODUuMDY5IDMuNjU5LTE0LjkzIDcuOTUxLTI1LjI1NCAxMC43OTEtNDEuMjgyIDIuODM2LTIuNTE1IDUuNDE1LTQuMjU0IDguNTE3LTYuNDQ0Ij48L3BhdGg+PHBhdGggZmlsbD0iIzQwMTI1YSIgZD0iTTQ1Ny43NDUgMjg0LjczYzY1LjI3NC00Ni4xMjcgMTI5LjM5Mi04Ni4wODcgMjAzLjgyLTExNi4xNDMgMTguNzY3LTcuNTc5IDM3Ljc3Ny0xNC43NTggNTYuMzc2LTIyLjY0Ni0yMy4yNTggMjcuMTU4LTM4LjgwOSA1MS4yMTktNTguMzg3IDgxLjEzNS0uNS04LjE3NCA0MC4yMi02MS4xNTkgNDcuNzUxLTcyLjUwOC0zLjAxMi0uNjMxLTEuNTk1LS45MzEtNC4wMzYuMDAxYTEzODYgMTM4NiAwIDAgMC01OS40NTYgMjQuMzM1Yy01Mi41NjggMjIuOTM5LTEwMS44OSA0OS45NzktMTQ5LjE0IDgyLjU2Mi02LjU0MSA0LjUxMS0zMS4xNSAyMy4wNi0zNi45MjggMjMuMjY0Ij48L3BhdGg+PHBhdGggZmlsbD0iIzI5MGMzZCIgZD0iTTU1OC4zOTYgODg1LjAwNGM0NS40NDggMTM2LjU4NiAxMzEuNjE3IDI0MC4wMzYgMjQ4LjY2IDMyMS40ODYtLjI4LjA0LS41Ni4wNy0uODQxLjEtMzIuOTI2LTE1LjY3LTEwMS40OTctNzguOTktMTIxLjA4LTEwMi4yNC01MS4xOTQtNjAuOC04OC45NDUtMTEzLjM4NC0xMTYuNzQyLTE4Ni4zODYtMy41NDItOS4zMDItMTAuNTU3LTI0LjMzMy05Ljk5Ny0zMi45NiI+PC9wYXRoPjxwYXRoIGZpbGw9IiM0MDEyNWEiIGQ9Im00OTAuMjI4IDkyMi4xODYgMi40ODMuOTg1YzQuNzE5IDcuNzU2IDEwLjM3MiAxOC4yNDIgMTQuODg5IDI1Ljc4NWE5NDQgOTQ0IDAgMCAwIDIyLjk0NCAzNS43MjJjMTEuNzMzIDE3LjE3MiAyNi4wMjggMzMuODQyIDM3LjAxIDUwLjcxMmwuMjQ3IDIuNDNjLTI2LjMwOS0zMS4yNC01OC43OTItNzkuNTI4LTc3LjU3My0xMTUuNjM0Ij48L3BhdGg+PHBhdGggZmlsbD0iIzI5MGMzZCIgZD0iTTYxMy4yNjYgMTA4OC4yN2M1Ljk0OSAxLjMzIDIzLjE3MiAyMC4wMyAyOS42MiAyNS42OSAyLjIxNiAyLjI1IDIuOTEgMy4wOSA1LjY0NiA0LjgzIDkuOTY0IDkuOTUgMjEuODAzIDE3LjgyIDMwLjk3OSAyNi42OWwtMS43MzEuNDdjLTI1Ljg0Ny0yMC41OS00MS4zOTEtMzQuMTYtNjQuNTE0LTU3LjY4Ij48L3BhdGg+PHBhdGggZmlsbD0iIzQwMTI1YSIgZD0iTTY3OS41MTEgMTE0NS40OGM0LjA5MiAyLjY1IDM4LjU3MiAyNy42OSAzOS44MDkgMjkuNjFsLS4zMi44NWMtMTEuMTM4LTUuOTUtMzEuNTQ5LTIxLjgxLTQxLjIyLTI5Ljk5em0tMzYuNjI1LTMxLjUyYzMuMDMxIDEuMzUgMy41MzMgMi4zMiA1LjY0NiA0LjgzLTIuNzM2LTEuNzQtMy40My0yLjU4LTUuNjQ2LTQuODMiPjwvcGF0aD48cGF0aCBmaWxsPSIjZmM1OTFmIiBkPSJtMTAxMy4zNiAxNDEuNjYyIDUuODIgNy40NTggNTA5LjQ5IDU4MS4zODEgMTg3LjY5IDIxMy4zMzUgNjMuMTcgNzIuMTc0YzkuOTEgMTEuMiAyMC4wMiAyMS4xMyAyOS41OCAzMi43OC00Ljg3IDUuNTEtOS4yMSAxMC40NS0xNC40NCAxNS42MS0yMS45OSAyNi4zOS00Ni43OCA1My4wNS02OS44MSA3OC42OWwtOTUuODggMTA4LjIzLTM2OC44NSA0MTguNDgtMTY5LjY0IDE5Ni4wOS0zOC4zMSA0NC4zMmMtMi4zIDIuNjUtMTMuNDMgMTUuNzktMTUuMzEgMTcuMmE5MjMgOTIzIDAgMCAwLTIzLjAzIDI3LjNjLTIuMTEtNy4yNS0uNy02MC41OS0uNTctNzEuMzUgOS4zLTEzLjI0IDMyLjA1LTM3LjEyIDQzLjQ2LTUwLjQ2bDExOC43LTEzNi4yNGE0OTI3NyA0OTI3NyAwIDAgMSAzNTUuOTItNDA1LjYybDE1MC4yLTE2OS40NmMxOC45Mi0yMS41NCA0OC42OS01Mi4yMyA2NS4yNS03NC4zNi0xOC4wNC0yMi4xNy00MS41LTQ0LjE4LTU5LjIxLTY3LjIzMS03LjA3LTcuMjUxLTE4LjA4LTE5LjY5OS0yNC4yMi0yNy41NzktNC43OC0zLjE2NS0yMC4wOC0yMi4wMzUtMjQuMy0yNy4yNzEtNC42NC0zLjA3Mi0zMS42MS0zNS4yMzUtMzYtNDEuMDMtMy4yMy0xLjYzOC0zNC4wOS0zNy45MTctMzguMjktNDMuMDc2LTguNTctOC41ODItMjMuNzktMjYuNDMyLTMxLjQ4LTM1LjY4Ny0xLjktMS40ODUtMjEuOTktMjQuMDY4LTI0Ljc3LTI3LjQtMTUuMTMtMTguMTc5LTM0LjYyLTM3LjcwOC00OC45NS01Ni4wNDQtNi40OS02LjMwMS0yNi41OS0zMC4xMTMtMzIuMi0zNy4zNzItNS44Mi00LjE0Ny0zMi4zNS0zNS42NjQtMzguNjEtNDMuMjk0LTYuNDktNy4yOTgtMTIuOTEtMTQuMzc4LTE4Ljk2LTIyLjA2NS04LjExLTcuMzkyLTI4LjM4LTMxLjcyOS0zNi44Ni00MS40ODNsLTYzLjAxLTcxLjY0OS05Ni4yLTEwOS41OGMtMjIuNzktMjUuNjA2LTQ3LjUyLTUyLjMwNi02OS4xNy03OC44MzYtNS43OC01LjQyNi0yMC43NS0yMy41OTItMjYuMzYtMzAuMzQ4LTYuMTMtMy44MTEtNTYuOTYtNjUuMy02NC45NS03NC44M3oiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJtMTAxOS4xOCAxNDkuMTIgNTA5LjQ5IDU4MS4zODEgMTg3LjY5IDIxMy4zMzUgNjMuMTcgNzIuMTc0YzkuOTEgMTEuMiAyMC4wMiAyMS4xMyAyOS41OCAzMi43OC00Ljg3IDUuNTEtOS4yMSAxMC40NS0xNC40NCAxNS42MWwtLjY4LS43MmMuODgtMi43OSA4LjUxLTkuOTMgMTEuNTEtMTMuODZsLjYxLS44MmMtMTEuMjQtMTQuMDQtMjYuMDUtMjkuMTctMzguMjMtNDMuMThsLTExMS4xNS0xMjYuMTUxLTQwOS43LTQ2OC4zNjUtMTE3LjgyLTEzNC4wOTJjLTM1LjU5LTM5Ljk2NS03MS4xNi03OS45ODktMTA2LjItMTIwLjQ1LTMuNTItNC4wNzQtMy41Mi0zLjI3NS0zLjgzLTcuNjQybTU4My44OSA3MzQuOTg5YzUuNjYgMS45OTYgMzEuNzUgMzIuNDYgMzYuMDkgMzguNjM1bC0uMDkgMi4zOTVjLTQuNjQtMy4wNzItMzEuNjEtMzUuMjM1LTM2LTQxLjAzbS02OS43Ny03OC43NjNjOC40MiAxLjg4MiAyMy41MyAyNC44NDQgMzAuMzMgMzEuMzE2IDEuMDIuOTYxIDEuMTcgMy4wMDcgMS4xNSA0LjM3MS04LjU3LTguNTgyLTIzLjc5LTI2LjQzMi0zMS40OC0zNS42ODdNMTQyNy4zOCA2ODQuNTNjNS40MSAxLjU3NyAzMi4wOCAzMi4yNTggMzIuMiAzNy4zNzItNi40OS02LjMwMS0yNi41OS0zMC4xMTMtMzIuMi0zNy4zNzJtLTM0OS4xNy0zOTcuMjU1YzUuMTUgMS4yMDUgMjUuOTQgMjQuNDM2IDI2LjM2IDMwLjM0OC01Ljc4LTUuNDI2LTIwLjc1LTIzLjU5Mi0yNi4zNi0zMC4zNDhtNTg1LjE2IDY2NS4xMzVjNS4wMS44NDUgMjQgMjIuMDE4IDI0LjIyIDI3LjU3OS03LjA3LTcuMjUxLTE4LjA4LTE5LjY5OS0yNC4yMi0yNy41NzltLTY0OS41MyAxMDAyLjNjLjMxLTIuNTIuMzMtMy4wMS4wNC01LjQ1bC0uMjUtMiAxLjQzLTEuNTdjMTAuMDItMi4xMiAxMy42Ni0xNi44MyAyMS44MS0xOC4yOGE5MjMgOTIzIDAgMCAwLTIzLjAzIDI3LjNtMzU1Ljk3LTEzMzUuNTM5IDIuMTEtLjE4NWM0LjU4IDQuNDEgMTYuOTQgMTUuNzI2IDE2Ljg1IDIyLjI1LTYuNDktNy4yOTgtMTIuOTEtMTQuMzc4LTE4Ljk2LTIyLjA2NSI+PC9wYXRoPjxwYXRoIGZpbGw9IiM2OTIxODQiIGQ9Ik04MDcuNTczIDEyMy41ODJjNjkuNjAzLTE1LjkzIDEyNC42MDUtMjAuODU0IDE5NC41NTctMjUuNzI1LS4wNCAxNS4yNDEtLjYyIDM1LjkyNS41NyA1MC42ODItOC4wMTcgNi4zODItMTYuNzUxIDEyLjEzNC0yNC40NTQgMTguMDgzLTEzNi4xMjggMTA1LjEzMy0yNTEuOTggMjU0LjIzNS0yNjkuMzQ3IDQzMC4zMzQtNC41MjggNDUuOTEzLTQuODMxIDk1Ljc4NCAyLjI2MyAxNDIuMjA0IDEuMzg3IDkuMDczLjM4OCAxOS42NTUgMS41NjIgMjguODc5IDYuNzY3IDQ4LjgzOSAyMC4yMTcgOTcuMjM1IDQwLjk2MiAxNDIuMDE5IDMuNDc0IDcuNDk4IDYuODA0IDEyLjc3MiA5Ljc5MSAyMC42MTYgMzAuODM1IDYwLjk0MSA2OC4wNDYgMTE4LjE5NiAxMTguMTY3IDE2NS4xNzYgNi45NTkgNS4yMiAxNi43NjggMTQuOTQgMjMuNzU3IDIxLjA3bC01LjQ3NSA0LjU4Yy03LjQzNC0yLjg1LTI4Ljk0Mi0xNS4zNi0zNS4yMS0xOS44MS0zNC45ODUtMTguODEtOTUuNjMtNzQuODMtMTIxLjQ2OS0xMDQuNDk0LTQuMzI2LTMuMi0yMC44OTUtMjQuNTE1LTI0LjUzOS0yOS4zNTUtOC44ODEtMTAuNDMtMTkuNDE4LTI1LjA0LTI2LjE0Ni0zNi42MDItOC40NjItMTAuNTAyLTE3Ljc5OS0yOC4zMzYtMjMuODE0LTQwLjE3Ni00MC45MzYtODAuNTktNTUuNjE4LTE3Mi41NzYtNTIuOTg0LTI2Mi4zMjkuODAxLTI3LjI4NS0uNTA3LTU1Ljc5IDIuODE3LTgzLjE5MiAyLjk2OS0yNC40MyA3LjU1OS02MC4xMyAxMy44NjctODMuNDc5IDI2Ljk2OS05OS44MTcgNzUuMjA2LTIwMC4yOTcgMTMzLjc4NC0yODUuMzgzIDcuMTkyLTEwLjQ0NiAzMy4wODUtNDUuNzI1IDQxLjM0MS01My4wOTgiPjwvcGF0aD48cGF0aCBmaWxsPSIjNDAxMjVhIiBkPSJNODgxLjY0NCAxMDk1Ljg1Yy01LjUwNi0uMjMtOS4zODktNS43LTEyLjk4OS05LjQ2LTM2LjY2OS0zOC4zMi02Ny45NDQtODAuOTctOTIuODA0LTEyNy44MzktMy42NDgtNi44NzgtMTIuNjM2LTIwLjgyOS0xMi4zNzQtMjcuODc3IDMwLjgzNSA2MC45NDEgNjguMDQ2IDExOC4xOTYgMTE4LjE2NyAxNjUuMTc2Ij48L3BhdGg+PHBhdGggZmlsbD0iIzI5MGMzZCIgZD0iTTc0My4yNDcgOTk3LjE5NmM0LjEwMy4zODMgNy45NDIgNS4xNTQgMTAuOTc5IDguMjg0IDUuMTE1IDQuNDcgNi43MjUgNi4xMiAxMS4wODcgMTEuMzNsNy4zMzQgNy4yNmMyLjg1IDQuMzMgMTIuNjAzIDEzLjgyIDE2LjgyMyAxNi44MSA0LjgwMSA1LjMxIDE4LjM3MSAxNi40IDI0LjQ3OSAyMS4wMmwxLjg0MyAxLjQ5IDQuMTc2IDMuNTMgMS44MTEgMS40NWEyMDggMjA4IDAgMCAwIDI3LjE2NyAyMC4zOGwyLjU3IDEuNzcgMy4yNzEgMi4wOCAxLjMzOCAxYzIuNDkgMS44NyA4LjE5NyA1LjEzIDguNTkxIDguMDktMzQuOTg1LTE4LjgxLTk1LjYzLTc0LjgzLTEyMS40NjktMTA0LjQ5NCI+PC9wYXRoPjxwYXRoIGZpbGw9IiM0MDEyNWEiIGQ9Ik03NTQuMjI2IDEwMDUuNDhjNS4xMTUgNC40NyA2LjcyNSA2LjEyIDExLjA4NyAxMS4zMy00LjUxOS0zLjYyLTcuNzM0LTYuNTgtMTEuMDg3LTExLjMzIj48L3BhdGg+PHBhdGggZmlsbD0iIzI5MGMzZCIgZD0iTTY5Mi41NjIgOTMxLjIzOWM0LjU4NiAxLjgyOSAyNi40MzkgMzIuMTc0IDI2LjE0NiAzNi42MDItOC44ODEtMTAuNDMtMTkuNDE4LTI1LjA0LTI2LjE0Ni0zNi42MDIiPjwvcGF0aD48cGF0aCBmaWxsPSIjNDAxMjVhIiBkPSJNNzcyLjY0NyAxMDI0LjA3YzMuMjg5IDEuOTIgMTQuNDI3IDEzLjU4IDE2LjgyMyAxNi44MS00LjIyLTIuOTktMTMuOTczLTEyLjQ4LTE2LjgyMy0xNi44MSI+PC9wYXRoPjxwYXRoIGZpbGw9IiM2OTIxODQiIGQ9Ik0xMzEuNTQ2IDcyMS42NDdjMS42NTctMy42MzQgMy43MjMtOC41NDkgNS42NDYtMTEuOTI1LjkwNSA0LjY5IDIuNzI4IDEzLjA2NSAzLjE0MyAxNy41NjggNy42MTkgMjIuNzY0IDkuNzQ0IDU3LjcwNiAxNS41NDkgODIuODQ0IDEzLjQ0NSA1OC4yMjkgMzMuMTM0IDExMS43MjMgNTIuNTU0IDE2Ny44NDMgMTAuODgzIDI0LjIyMyAyMC41IDQ3LjAwMyAzMi4yMDkgNzAuOTQzIDMyLjc3OSA2Ny4wNCA3MC4yMjUgMTE4LjEyIDExOS4wOSAxNzMuNzMgNC4wODYgNC4wNiAzMC43NDIgMzAuMTcgMzIuNDQ5IDMzLjM4IDUxLjIxNiA0Ni41MiAxMDUuMjg2IDg2Ljk2IDE2Ny4zOSAxMTguMTggNS4yNTggMi42NCAxMS4zODkgNS40NCAxNi4zOTMgOC40MSAyNy43NDMgMTEuMzEgNTQuOTI1IDIyLjc3IDgzLjM4MiAzMS43MSA5Mi40MjkgMjkuMDUgMTkxLjE3OSAzMS40NyAyODYuNjk5IDE5LjYzIDcuMjA5LS45IDIyLjAxNC0zLjc4IDI4LjgyMS0zLjY0IDcuNTU0IDMuNiA0LjMzNC0zLjU2IDcuNDY5IDMuMTQtOTQuMTg3IDQxLjE3LTIzOC41NzggNTEuOTItMzQwLjAwNiAzNy41M2E1NjIuNSA1NjIuNSAwIDAgMS04OC43MzEtMjAuNzljLTE0LjA4Ny00LjUyLTMzLjU3Ny0xMS4wMi00Ni44LTE3LjY0LTE2Ljk2LTUuOTItNTEuNTI2LTIyLjA1LTY2Ljg4Ny0zMC45My0xMS4xNy00LjYxLTMwLjQ1OS0xNi4wMi00MC45OTktMjIuMzFhODg2IDg4NiAwIDAgMS0xMDkuMDIxLTc1LjQ4Yy00LjgyOS0zLjctOS40ODctNy42OS0xNC4xNi0xMS42YTg1Ni42IDg1Ni42IDAgMCAxLTExMy41MTYtMTEzLjg3Yy0zLjgxNy00LjM4LTYuNjQ3LTcuNTktMTAuMDA2LTEyLjQxLTIxLjc2OS0yMy4zNy02My45NTgtODUuMTgtNzkuMTk0LTExMy4zNyAxLjMyNy0zMy4xNCAxLjc0Ny02MC4zNCA0LjcwNi05My45MThhODk3LjYgODk3LjYgMCAwIDEgNTMuODItMjM3LjAyNSI+PC9wYXRoPjxwYXRoIGZpbGw9IiM0MDEyNWEiIGQ9Im0zNTkuNzM3IDEyMjIuNjUtMi41NzItLjY3Yy01Ljg0LTUuMzQtMTAuMzA4LTExLjYxLTE1LjU5OC0xNy40NS00MS44ODEtNDYuMjItNzYuMTgyLTEwMC43LTEwMy44NDUtMTU2LjQ4LTQuNzQ4LTkuNTgtMzEuMzIzLTY0LjAwOC0yOS4yODQtNzAuMDczIDEwLjg4MyAyNC4yMjMgMjAuNSA0Ny4wMDMgMzIuMjA5IDcwLjk0MyAzMi43NzkgNjcuMDQgNzAuMjI1IDExOC4xMiAxMTkuMDkgMTczLjczIj48L3BhdGg+PHBhdGggZmlsbD0iIzI5MGMzZCIgZD0iTTM5Mi4xODYgMTI1Ni4wM2M1MS4yMTYgNDYuNTIgMTA1LjI4NiA4Ni45NiAxNjcuMzkgMTE4LjE4IDUuMjU4IDIuNjQgMTEuMzg5IDUuNDQgMTYuMzkzIDguNDFsLS45MDMuN2MtNi44MDQtMS4yMi0yNC4yMDEtMTEuMjYtMzAuNzA0LTE0Ljc5YTcyNiA3MjYgMCAwIDEtMTI4LjU0OC04OC42N2MtNi40MzItNS40OC0yMC4xOTQtMTYuODItMjMuNjI4LTIzLjgzIj48L3BhdGg+PHBhdGggZmlsbD0iIzQwMTI1YSIgZD0iTTQzOS45MTYgMTQwMS42M2M0LjYzLjU4IDY1Ljc3OSAyOC41NCA2Ni44ODcgMzAuOTMtMTYuOTYtNS45Mi01MS41MjYtMjIuMDUtNjYuODg3LTMwLjkzbS0zMDguMzctNjc5Ljk4M2MxLjY1Ny0zLjYzNCAzLjcyMy04LjU0OSA1LjY0Ni0xMS45MjUuOTA1IDQuNjkgMi43MjggMTMuMDY1IDMuMTQzIDE3LjU2OC0xLjMzOC0xLjQyLTEuNDg5LTEuODg4LTIuMzE2LTMuNjE0bC0uODYzLTEuODI0Yy0zLjE1NS0xLjYtMS4zOTgtMS4yMDYtNS42MS0uMjA1bTIwLjY2OCA0NDQuMzEzIDEuMzI1LS43OGM0LjgxNSA0LjE2IDYuODQxIDYuMTggOS42OTUgMTEuOThsLTEuMDE0IDEuMjFjLTMuODE3LTQuMzgtNi42NDctNy41OS0xMC4wMDYtMTIuNDFtMTIzLjUyMiAxMjYuMjhjNS4yNTQtLjA5IDExLjQ0NiA1Ljc0IDE0LjYzIDkuNTdsLS40NyAyLjAzYy00LjgyOS0zLjctOS40ODctNy42OS0xNC4xNi0xMS42Ij48L3BhdGg+PHBhdGggZmlsbD0iIzY5MjE4NCIgZD0iTTc5LjM4OCAxMTU4LjUyYzE1LjE0IDIxLjUgMzUuMDM5IDQ3Ljk3IDQ4Ljc5NSA2OS41NSA0NS45MyA2MS4wNCA5NS40NDIgMTE4LjggMTUzLjUzNSAxNjguNjIgMTIuMzU3IDkuMiAyNS42MzEgMjEuNDggMzcuNzkyIDMxLjMyIDMuNDI2IDIuNzggMTcuMzAzIDEzLjgyIDE5LjcwOSAxNi4zYTExMDIgMTEwMiAwIDAgMCA2OC4zMTggNDYuNDVjMTAuMjA0IDYuMzEgMzAuNDAzIDE2Ljg5IDM4LjU2MiAyMi42OSAxOC42NzUgOC4xOCAzMi4wNjggMTUuNSA1MS45NzQgMjIuMDMgMjEuOTU5IDkgNDIuNzgzIDE2LjEyIDY1LjY5MyAyMi41OSAyNC4xNjIgNi44MyA0Ny45NjUgNy43MSA3Mi4xOTkgMTEuNzQgNjQuODE4IDEwLjc5IDEyNi40OTYgNS4yIDE5MS4wMS0zLjA5IDcuOTgtMS4wMiAxNy4wNDMtNC45NyAyNS4xMDQtNi4zMSA3LjIyNC0xLjU4IDE1LjAyNS0yLjUzIDIyLjA5Ny00LjIyYTg4OSA4ODkgMCAwIDAgMTAzLjgxNS0zMi42M2M0LjU3OC0yLjYzIDguOTAxLTQuMzUgMTMuNzM0LTYuNDJsMTEuMTQ1LTUuNTFjLTEuMzcgOS45LS44IDI5LjEtLjYxIDM5LjYzLTMyLjgzNiAyMS40LTc3LjA4MyAzOS4yNy0xMTQuMjU5IDUyLjI0LTQ3LjE4MSAxNi40Ny05MS4zNTkgMjcuNDQtMTQwLjU4NSAzNS4yOS05Ni40MzcgMTUuMzgtMTc4LjE0MSAxMS42NC0yNzMuMzctOC43NC0xMS4zOTQtMi40My0yMi42MTItNi42LTMzLjgwMS05LjkzLTM0LjEzMy0xMC4xNS02Ny4wNDktMjAuNjItMTAwLjA0LTM0LjE2LTguOTA1LTMuNjUtMTkuNTgtNy4zMi0yNy42MjktMTIuNDYtMjEuNzYzLTguNDUtNjcuMzktMzIuMDQtODYuNjc2LTQzLjkxLTQuMTY4LTEuNDUtMTkuNDU0LTExLjc0LTIzLjk1NC0xNC42OS00LjA2NS0yLjM4LTQuNDUyLTIuNzgtNi44NzEtNi44My00OC44MTItNzkuMDYtODMuNDQ1LTE4Mi4wOS0xMDMuMDA3LTI3Mi40Ny01LjQyMS0yNS4wNC04LjIyOC01MS43NS0xMi42OC03Ny4wOCI+PC9wYXRoPjxwYXRoIGZpbGw9IiMyOTBjM2QiIGQ9Ik0xMjguMTgzIDEyMjguMDdjNDUuOTMgNjEuMDQgOTUuNDQyIDExOC44IDE1My41MzUgMTY4LjYyLTcuMzE2LS41OS01My40NzgtNDcuMDUtNjAuOTcyLTU0LjcxLTIuMDU1LTIuNzMtMi4yMS0yLjk1LTQuNzgyLTUuMTctMTEuNjA4LTEyLjQ1LTg3LjAxNC05OC4yLTg3Ljc4MS0xMDguNzQiPjwvcGF0aD48cGF0aCBmaWxsPSIjNDAxMjVhIiBkPSJNMzM5LjIxOSAxNDQ0LjMxYTExMDIgMTEwMiAwIDAgMCA2OC4zMTggNDYuNDVjMTAuMjA0IDYuMzEgMzAuNDAzIDE2Ljg5IDM4LjU2MiAyMi42OS05Ljg1NS4yMy0xMDMuNTQ0LTU5LjkzLTEwNi44OC02OS4xNE0yMjUuOSAxNTI5LjU5YzcuOTE1LS4xNCA0OC40NDcgMjUuNzggNjAuMzc2IDI5Ljc2IDQuMjA2IDEuNCAyMy43MiAxMC41MSAyNi4zIDE0LjE1LTIxLjc2My04LjQ1LTY3LjM5LTMyLjA0LTg2LjY3Ni00My45MW03NjUuODI1LTEyLjQ1Yy0xLjkxNiA0LjIxLTcuOTY1IDYuMzItMTIuMjMgNy4yNWwtMS41MDQtLjgzYzQuNTc4LTIuNjMgOC45MDEtNC4zNSAxMy43MzQtNi40Mm0tNzk2LjY1LTkuMDdjMy44MzEuMjIgNi4xMjggMS4zNyA3LjQwMSA1LjI1bC0uNTMgMS41OGMtNC4wNjUtMi4zOC00LjQ1Mi0yLjc4LTYuODcxLTYuODNtMjAuODg5LTE3MS4yNmMyLjU3MiAyLjIyIDIuNzI3IDIuNDQgNC43ODIgNS4xNy0yLjgwOS0xLjk4LTMuNDI5LTIuMDItNC43ODItNS4xNyI+PC9wYXRoPjxwYXRoIGZpbGw9IiNmYzU5MWYiIGQ9Ik0xMDEzLjE4IDMyNC42NDNjOC41NiAxMy4yNDUgMzguMzYgNDQuNzI3IDUwLjcyIDU4LjgxMWwxMjQgMTQwLjU4IDQ2MC44OSA1MjYuMTQ2Yy04LjE1IDcuOTQtMTQuNjcgMTQuODgtMjIuMzEgMjMuMjctOC41MyAxMS43Ny0yNy43MSAzMS4zMi0zOC4xMSA0Mi45OGwtNzkuNyA4OS44LTI0MC4wNSAyNzMuMjgtMTUzLjMzIDE3NS4xOS01MC4zNiA1OGMtNS4wOCA1Ljc2LTE4LjE0IDIxLjE4LTIzLjMyIDI1Ljc3LTMuNDggNC42Ny0yMy4zMyAyNy43Ni0yNy4zNCAzMS4yMWwtLjY1LS41MmMtMS4wOC0yMi4zMy0uNDktNDcuODYtLjQ0LTcwLjQxIDE2LjM3LTIxLjAyIDQwLjU1LTQ3LjE4IDU4LjM5LTY3LjE4bDg4Ljk3LTEwMC40N0wxNDgwIDExNjcuMzJsNjUuNzItNzQuMmMxMi4zLTEzLjc0IDI5LjQtMzEuOTUgNDAuNDgtNDYuMTMtNi4zNy0zLjY3LTIzLjcxLTI1LjEyLTI4Ljk3LTMxLjYyLTUuMTItNC41Ny00MC41My00NC40MTgtNDMuODQtNDkuNjQ5LTQuODgtNC4zNDctMjAuMTYtMjIuMTc1LTI0LjM1LTI3LjU4My0yLjczLTEuNDc4LTkuNDgtMTAuMTI1LTExLjc2LTEyLjkwNi0zLjA2LTIuMTQ5LTMxLjAyLTM1LjE0MS0zNS4yNC00MC4wNzEtMy43Ni0yLjU5OS0zMi41Ny0zNi45OTQtMzYuNzEtNDEuOTUtMTIuOTUtMTMuMjA2LTI0LjM0LTI2LjgzLTM2LjMtNDAuODktMy4zOS0yLjgzNS0xNi40NC0xOC41ODItMTkuNDktMjIuNDU1LTYuMDQtNS45MzEtMTUuMzgtMTcuMjE2LTIwLjQxLTIzLjc1NS0yLjM1LTEuMzQ2LTI5LjI2LTMyLjQxOS0zMS40Ny0zNi4wMTQtOC43NS04LjI1Ni0yNS45OC0yOS42MjMtMzQuNTEtMzkuODUxLTIuMi0xLjUyLTE2LjI0LTE3Ljk4NC0xOC44Mi0yMC45NTVsLTQ0LjE3LTUwLjg3OC0xMTMuMTktMTMwLjEzMWMtMTcuMzYtMjAuMDExLTM4LjIyLTQyLjUwNC01NC40Ni02Mi45MTYtNS4xOS01LjI5My0xNC45Ni0xNi40NTYtMTkuMzktMjIuMzN6Ij48L3BhdGg+PHBhdGggZmlsbD0iI2U0MmYwZSIgZD0iTTEwMTMuMTggMzI0LjY0M2M4LjU2IDEzLjI0NSAzOC4zNiA0NC43MjcgNTAuNzIgNTguODExbDEyNCAxNDAuNTggNDYwLjg5IDUyNi4xNDZjLTguMTUgNy45NC0xNC42NyAxNC44OC0yMi4zMSAyMy4yN2wuMDEtMS4xMmMzLjUxLTcuMSAxMy44Ny0xNi40OSAxOS44NS0yMi4zOC0zNi40NS0zOC41Mi03My40Ny04Mi4yMy0xMDguMDctMTIyLjU1NWwtMTEyLjk4LTEzMC4xMDEtNDA5LjktNDY1LjMzOWMtLjE4IDE1LjEzMy0yLjM1IDQ1LjUyNi41NSA2MC4wNzEuMjggMS4zNjggMTQuODEgMTkuNDY4IDE3LjE5IDIyLjQ2N2wtLjYyLjg3M2MtNS4xOS01LjI5My0xNC45Ni0xNi40NTYtMTkuMzktMjIuMzN6bTM1NS44NSA0NzcuNjc4YzUuMzQgMS4wNjUgMzMuMTkgMzMuNDMzIDM3LjA4IDM5LjIzMWwtLjc4IDEuNjU5Yy0xMi45NS0xMy4yMDYtMjQuMzQtMjYuODMtMzYuMy00MC44OW03My4wMSA4Mi44NGMxLjA3LjIzMyAyLjEzLjQ2NSAzLjE5LjY5OCAxMS45MiAxMS43NyAyMi4wNCAyNS4yODMgMzMuMDIgMzcuODk1bC0uOTcgMS40NzhjLTMuMDYtMi4xNDktMzEuMDItMzUuMTQxLTM1LjI0LTQwLjA3MW0tMTc4Ljg5LTIwNC45MTVjNy40NSAxLjU3IDI2LjE4IDI3LjUzNCAzMi4wNyAzNC44NzUuOSAxLjEyOSAyIDMuNTYgMi40NCA0Ljk3Ni04Ljc1LTguMjU2LTI1Ljk4LTI5LjYyMy0zNC41MS0zOS44NTFNMTAxNS45MyAxNzYzLjM2YzcuMDEtNi4yNCAxOS4yNy0yMi4zNiAyNS42OC0yNC44OS0zLjQ4IDQuNjctMjMuMzMgMjcuNzYtMjcuMzQgMzEuMjFsLS42NS0uNTJjLjgyLTQuNDQuODEtMTcuMS45Mi0yMi4yNi4zMSA1LjUzLjg3IDEwLjk2IDEuMzkgMTYuNDZtNTQxLjMtNzQ3Ljk5YzUuMTUuOTggMjcuODEgMjYuOSAyOC45NyAzMS42Mi02LjM3LTMuNjctMjMuNzEtMjUuMTItMjguOTctMzEuNjJtLTY4LjE5LTc3LjIzMmM2Ljc5IDMuNTE3IDIyLjU0IDIwLjA4NiAyNC4zNSAyNy41ODMtNC44OC00LjM0Ny0yMC4xNi0yMi4xNzUtMjQuMzUtMjcuNTgzbS0xNTkuOTEtMTgyLjAyN2M2LjYyIDIuNDk4IDE5LjM3IDE2LjQxNyAyMC40MSAyMy43NTUtNi4wNC01LjkzMS0xNS4zOC0xNy4yMTYtMjAuNDEtMjMuNzU1Ij48L3BhdGg+PHBhdGggZmlsbD0iIzY5MjE4NCIgZD0iTTI2NS44NTggMTYyMC4zOGMxOS43NDMgMTEuMjcgNDIuODI0IDIxLjExIDYxLjI2MyAzMi4zNiAyNS42MjEgMTEuODEgNTYuOTM2IDI4LjQyIDgyLjM1IDM4LjI4YTc5Mi41IDc5Mi41IDAgMCAwIDMwMy4yMDggNTIuMzFjMjguNy0uNzIgNTMuMDY4LS45NyA4MS4wNTYtOC4xMSA2LjE4MS0xLjU4IDE0LjcyNi0xLjI3IDIxLjE3OC0yLjk1IDE0Ljc0LTMuODQgMjkuMzQ5LTcuNzUgNDQuMjUzLTEwLjk0IDYuOTg5LTEuMTcgMTYuNzkxLTYuMzMgMjMuNTY5LTcuNTMgOC41NjUtMS41MSAzMC4wNDctMTEuNDkgMzcuMTg1LTExLjg4IDEwLjY2OC02LjEzIDI4Ljk2Mi0xMi4yOCA0MC44MjEtMTYuNDQgMTQuOTctOS4wOCAyNi41NjctMTQuMjkgNDIuMDg5LTI0LjU0LTIuNzEgMjMuMzUtMS4xMiA2Mi4yMS0uNTYgODYuMzgtMzIuNjc5IDIyLjM3LTY5Ljc1MSA0Mi4yNS0xMDYuNzEgNTYuNTgtMTMuMDgyIDUuMDctMjYuNTEyIDguOTMtMzkuNzQ4IDEzLjUzLTI3Ljc1MyA5LjY1LTU2LjM1NyAxOC45LTg1LjE5MSAyNC43OS03LjcwNCAxLjU4LTE1LjU2NSAyLjM2LTIzLjI5NCAzLjgyLTkuNTY3IDEuODEtMTkuMDc4IDQuMjYtMjguNzEyIDUuNjQtMTAuMTYzIDEuNDUtMjAuNDE4IDEuOTktMzAuNTk0IDMuMjktMTEuMzkxIDEuNDUtMjIuNTU5IDQuMzItMzMuOTk1IDUuNTQtMjAuMjc4IDIuMTgtNDAuOTE0IDEuNjItNjEuMjc4IDEuNTItMTUuNDM2LS4wOC00MS4yODcgMi4zMS01NS40NjQtLjY2LTIzLjQ0My00LjktMTMwLjI2Ni04Ni42MS0xNDUuNjItMTA1LjcxLTQzLjY2NC0zNi42MS04OS44MDctOTEuMTktMTI1LjgwNi0xMzUuMjgiPjwvcGF0aD48cGF0aCBmaWxsPSIjMjkwYzNkIiBkPSJNMjY1Ljg1OCAxNjIwLjM4YzE5Ljc0MyAxMS4yNyA0Mi44MjQgMjEuMTEgNjEuMjYzIDMyLjM2LTcuMDc3LjY2LTM4LjEyMi0xOS4yMy00OS40OTgtMjIuNjkgMTguNTMxIDMxLjI0IDU5LjQ1OSA2Ny42NyA4NC4zNzkgOTUuMSA1LjIwNCA1LjczIDI4LjQyMiAyNC42OCAyOS42NjIgMzAuNTEtNDMuNjY0LTM2LjYxLTg5LjgwNy05MS4xOS0xMjUuODA2LTEzNS4yOCI+PC9wYXRoPjxwYXRoIGZpbGw9IiM0MDEyNWEiIGQ9Ik05NjAuNzQxIDE2ODUuNDhjLTIuOTcyIDQuMDMtMzUuMzgzIDE2LjkxLTQwLjgyMSAxNi40NCAxMC42NjgtNi4xMyAyOC45NjItMTIuMjggNDAuODIxLTE2LjQ0Ij48L3BhdGg+PHBhdGggZmlsbD0iI2ZjNTkxZiIgZD0iTTEwMTMuNTYgNTExLjgyYzguMDggMTEuNjAxIDI5Ljg4IDM0Ljg5NyA0MC4zOSA0Ni44MDJsODMuNjMgOTQuNzA4IDM0OS4yOSAzOTYuNjVjLTIuNjQgMy4wNi0xNS43IDE4LjMzLTE4LjI2IDIwLjM1LTE2LjQ3IDIxLjA0LTM4LjA3IDQzLjAzLTU1Ljk5IDYzLjIxLTE2LjkxIDE5LjA2LTMzLjk5IDM4LjEtNTAuOTcgNTcuMTJsLTIxMS41OCAyMzcuODEtODUuNjQgOTcuMTljLTQuODcgNS41LTI2LjY5IDMwLjk2LTMwLjgyIDMzLjg0LTIuNjQgNC4xNi0xNi40NiAyMC42NS0yMC42MiAyNi4yMyAxLjIzLTIzLjQ5LS4wNS01MS4wNy41Ni03NS40MSAyLjY5LTMuNjEgMy44Ni00Ljc4IDcuMS03Ljk3IDEuOS0yLjkxIDI2LjE4LTI5LjU0IDMwLjExLTMzLjk2bDc2LjQ0LTg1LjY1IDE4MC4zNS0yMDMuOTVjMzcuNDctNDIuMjEgNzkuMjItODcuMDkgMTE1LjIxLTEzMC4zMWwtNi4wMy03LjQ2Yy0xNy4yMS0xOC4xMy0zNS4zOS0zOS42NC01MS41OC01OC43MzItMy45OS0yLjcyMi0xOC45MS0yMC41MjQtMjIuMTgtMjUuMDk5LTMuNjEtMi4zMjQtMzMuMDctMzYuODczLTM3LjU3LTQyLjI4OC03LjgxLTcuMzI0LTI5LjY3LTMzLjAzMS0zNy40Mi00Mi4xNzMtMTYuNy0xOS43Mi0zOC41NC00Mi4xODEtNTQuMjMtNjEuOTc4LTYuMzktNi41MDYtMTkuMDgtMjEuMDU3LTI0LjUtMjguMjI3LTMuOTYtMi45MDQtMjIuMjktMjQuMzE2LTI2LjM1LTI5LjA4NS0xNC41Mi0xNy4wNDYtMzAuMzMtMzQuMDAyLTQ0LjU2LTUxLjE3NS00LjYyLTMuNzk0LTMyLjM4LTM3LjAzOC0zNy4yOS00My4xMTktMS44My0xLjI2My05LjU3LTEwLjgxNS0xMS4zMS0xMi45NjItNi43My03LjE0MS0xNC45NS0xNy4xNzgtMjEuNDctMjQuNzYyLTIuNzItMi4yMTUtMTItMTMuNjM2LTE0LjY4LTE3LjAyMy02LjU4LTcuMjYxLTEzLjMtMTQuODk0LTIwLjA3LTIxLjkzNy0uMTItMjMuMzE3LjQyLTQ3LjQ4OS4wNC03MC42NCI+PC9wYXRoPjxwYXRoIGZpbGw9IiNlNDJmMGUiIGQ9Ik0xMDEzLjU2IDUxMS44MmM4LjA4IDExLjYwMSAyOS44OCAzNC44OTcgNDAuMzkgNDYuODAybDgzLjYzIDk0LjcwOCAzNDkuMjkgMzk2LjY1Yy0yLjY0IDMuMDYtMTUuNyAxOC4zMy0xOC4yNiAyMC4zNWwtLjY0LS42NmMxLjE0LTIuODUgMTIuMzctMTUuMjggMTUuNjMtMTkuNDEtOS42NC0xMi42OS0yNi42My0zMC44NS0zNy41Mi00My4xNWwtNzYuNjEtODYuMzg3LTI0OS41MS0yODQuMjU0LTcwLjQ0LTc5LjQxNmMtOS4zNS0xMC42NDEtMjUuODktMjguNDg0LTMzLjczLTM5LjMzMy0uOTYgMjAuNjY0LS44MSA0Mi4zNDYtLjk2IDYzLjEwMyA0LjQ1IDQuMjgxIDE3Ljc4IDE3Ljk3NCAxOC43NiAyMy41NzQtNi41OC03LjI2MS0xMy4zLTE0Ljg5NC0yMC4wNy0yMS45MzctLjEyLTIzLjMxNy40Mi00Ny40ODkuMDQtNzAuNjRtNy4wOSA5OTAuNTNjLS4yIDMuODItMi45OCA2LjQzLTUuNjIgOS4yNy0uMTMgMTcuNDEtMS4xMyA1MC44My40OCA2Ni42NCAzLjQzLTQuMjggMTMuMzctMTcuMjMgMTguMS0xOC43Ni0yLjY0IDQuMTYtMTYuNDYgMjAuNjUtMjAuNjIgMjYuMjMgMS4yMy0yMy40OS0uMDUtNTEuMDcuNTYtNzUuNDEgMi42OS0zLjYxIDMuODYtNC43OCA3LjEtNy45N20zNDQuNS01MjAuMDYyYzEuNTUuNTI3IDMuNTggMS4zNTggNC41OSAyLjYzIDYuOTMgOC42OTEgNDYuNTcgNDguNjEyIDQ2Ljk5IDU2LjEwMi0xNy4yMS0xOC4xMy0zNS4zOS0zOS42NC01MS41OC01OC43MzJtLTU5Ljc1LTY3LjM4NyAxLjgtMS4xNDdjNi4xIDcuMjAxIDMzLjYzIDM2LjYwNyAzNi4wMyA0Mi40NzRsLS4yNi45NjFjLTMuNjEtMi4zMjQtMzMuMDctMzYuODczLTM3LjU3LTQyLjI4OG0tMjI0LjM1LTI1NS43NTcgMi44NC41MzFjMTIuMzMgMTMuMDggMjMuNTcgMjcuNTI2IDM1LjM4IDQxLjExNGwtLjkzIDEuNDc0Yy00LjYyLTMuNzk0LTMyLjM4LTM3LjAzOC0zNy4yOS00My4xMTltMTA4LjIgMTIzLjM3OWM2LjA5IDEuMzY5IDE5Ljk0IDE5Ljc4MyAyNC4wNiAyNS4xNDZsLjQ0IDMuMDgxYy02LjM5LTYuNTA2LTE5LjA4LTIxLjA1Ny0yNC41LTI4LjIyNyI+PC9wYXRoPjxwYXRoIGZpbGw9IiNlNDJmMGUiIGQ9Ik0xMDQ4LjI3IDYyMS40MmM3LjE2IDEuOTE5IDE2LjUzIDE1LjU3MyAyMS4wMyAyMS42ODFsLjQ0IDMuMDgxYy02LjczLTcuMTQxLTE0Ljk1LTE3LjE3OC0yMS40Ny0yNC43NjIiPjwvcGF0aD48cGF0aCBmaWxsPSIjZmM1OTFmIiBkPSJNMTI3OS44NyAxMzIuMDExYzI5LjE2IDEwLjQyNyA2Mi4xNiAxNS42NzkgODkuNjEgMzAuMjU4LjQ3LjI0OC45NS40NzYgMS40MS43MzIgNy41MiA0LjE1NyA3OC4yMiA4OC4wNTggOTAuODUgMTAyLjQ4M2wyNDguOTIgMjgzLjY3NiAxNjMuNCAxODYuMzgzIDQzLjUgNTAuMDU0YzEzLjg2IDE1Ljg4NyAyMy44MyAyMi45NTEgMjkuNTcgNDMuODg5IDcuMzcgMjYuODY1IDEwLjczIDUzLjgwMSAxNy4xMiA4MC41ODYtMTQuNzItMjAuODA1LTM4LjIyLTQxLjI1MS01Mi44NC02MC43NC0yLjc2LTEuOTYtMTUuNDYtMTYuNzg2LTE4LjQ5LTIwLjQzMy0yNC42Ni0yOS42NDktNTMuMjgtNTguMzA4LTc3LjI1LTg4LjM1YTExOTEgMTE5MSAwIDAgMS0yMy42OC0yNy4yMzJjLTYuNzUtNi4wOTctMjEuNTEtMjMuOTk5LTI4LjAyLTMxLjQ3OWE0MDM2IDQwMzYgMCAwIDEtNTMuMzYtNjEuMzc2Yy0xOC45LTIyLjA1LTQ0LjY4LTQ4Ljc3Mi02MS44Ni03MC43NjMtNS43OS01Ljc4Ni0xNi45MS0xOS42NzYtMjIuNjQtMjYuNDMyLTQuMzQtMy4wMTItMjcuMzMtMzAuNjQxLTMxLjM5LTM1Ljg3NC02LjcxLTYuOTI2LTE2LjgyLTE4LjY3OC0yMi42OS0yNi4xOTQtNC4xNC0zLjEzOC0zMi4wOS0zNS43NDctMzcuMjQtNDEuNTk4YTYzNTQgNjM1NCAwIDAgMS01Ni40Mi02NC4zNDRjLTguMjEtOS41MDktMTkuMTgtMjEuNjE0LTI2LjYyLTMxLjQ2N2ExMjgzIDEyODMgMCAwIDEtNDMuNjEtNDkuNDg1Yy0zLjEzLTIuNDE4LTEzLjcxLTE0LjY3NC0xNi4zMS0xNy45NzUtMTguMi0yMy4wNzMtNDIuNzMtNDUuNTE3LTYwLjIyLTY4LjgwNi0xNC4xNy0xNS40NjUtMzYuODItNDMuODg1LTUxLjc0LTU1LjUxMyI+PC9wYXRoPjxwYXRoIGZpbGw9IiNlNDJmMGUiIGQ9Ik0xMjc5Ljg3IDEzMi4wMTFjMjkuMTYgMTAuNDI3IDYyLjE2IDE1LjY3OSA4OS42MSAzMC4yNTguNDcuMjQ4Ljk1LjQ3NiAxLjQxLjczMiA3LjUyIDQuMTU3IDc4LjIyIDg4LjA1OCA5MC44NSAxMDIuNDgzbDI0OC45MiAyODMuNjc2IDE2My40IDE4Ni4zODMgNDMuNSA1MC4wNTRjMTMuODYgMTUuODg3IDIzLjgzIDIyLjk1MSAyOS41NyA0My44ODkgNy4zNyAyNi44NjUgMTAuNzMgNTMuODAxIDE3LjEyIDgwLjU4Ni0xNC43Mi0yMC44MDUtMzguMjItNDEuMjUxLTUyLjg0LTYwLjc0IDUuNjkuODg4IDM5LjM3IDQyLjA3IDQ3LjA2IDQ5LjYzNi0xLjg3LTIyLjQxNy05LjU4LTY0LjA5OC0xOS40OS04NC42NjYtMS45MS0zLjk2Ny0yMy4xMy0yNy41MDktMjcuMTYtMzIuMTQybC02My41LTcyLjg5Ny0yNzguMTctMzE2LjY1Mi0xNDcuMy0xNjguMTUyYTI3MDYgMjcwNiAwIDAgMS0zMC43LTM1Ljc5NWMtMy43My00LjM2My0xNy4xNi0yMC43NzgtMjEuMjktMjIuOTY2LTIxLjI1LTExLjI2OC01Ni40My0yMS4wMDctNzkuMy0yNi44MiA1LjMzIDUuMTE0IDM5LjczIDQ0LjE1OSA0MC4wNSA0OC42NDYtMTQuMTctMTUuNDY1LTM2LjgyLTQzLjg4NS01MS43NC01NS41MTMiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJNMTQwOC4xNCAyNzQuMzA1YzcuMjcgMS4yMzUgMzQuOTMgMzguMzkxIDQyLjMgNDUuMjkzIDEuMDcgMS4wMDEgMS4zNiAyLjczNSAxLjMxIDQuMTkyYTEyODMgMTI4MyAwIDAgMS00My42MS00OS40ODVtMzgzLjg1IDQzOS4wMTJjNS4zOCAxLjA5IDIzLjIgMjEuNTU0IDIzLjY4IDI3LjIzMmExMTkxIDExOTEgMCAwIDEtMjMuNjgtMjcuMjMybS0yMTkuOTYtMjUyLjExOGM3LjE4IDMuMTgzIDE4LjIzIDE3LjM4NCAyMi44NiAyMy45NTQuMTggMS44ODIuNDMgMS4xNzctLjE3IDIuMjQtNi43MS02LjkyNi0xNi44Mi0xOC42NzgtMjIuNjktMjYuMTk0bTU0LjA4IDYyLjA2OGM1LjYgMS45MjEgMjIuOTMgMjAuNjMzIDIyLjY0IDI2LjQzMi01Ljc5LTUuNzg2LTE2LjkxLTE5LjY3Ni0yMi42NC0yNi40MzIiPjwvcGF0aD48cGF0aCBmaWxsPSIjZmM1OTFmIiBkPSJNMTk2NC45NiAxMTg0Ljg1Yy03LjcyIDI3LjQ3LTEwLjQyIDY4LjYxLTIxLjk2IDk0LjkzLTIgNC41Ny0xNy4wNiAyMS4yOC0yMS4xNiAyNS45NGwtMzMuMjUgMzcuNzEtMTQ3LjI1IDE2Ni45MS0yNDEuMTcgMjc1LjQyYy0xOS45IDIyLjYzLTM5Ljg1IDQ1LjM0LTU5Ljg3IDY3Ljg3LTE0LjMxIDE2LjEtMjkuNTggMzUuNjEtNDQuMzggNTAuNzktMTIuMjggMTQuMzYtMjEuMzYgMjcuMjQtMzkuOTggMzMuMDItMy4xLjk3LTYuNDIgMi44NS05LjY2IDMuMTgtNC42MyAyLjQzLTE3LjAyIDcuNDItMjIuMTYgOC43Ny0xMy4wMSA1LjE5LTI5LjcxIDkuNzQtNDMuNDggMTQuMzUgNy40OS02LjYgMTUuMzctMTUuMjcgMjIuMTQtMjIuNzMgMS44LTIuOTEgMTMuMzMtMTUuNjggMTYuMTgtMTguODZsMzMuNjQtMzcuNTQgMTA4LjcyLTEyNC4zMSAzMTQuMzUtMzU5LjEyIDEyMS44My0xMzguOTVjMjIuMjItMjUuMzcgNDYuMjQtNTEuMzggNjcuNDYtNzcuMzgiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJNMTMwMi43OCAxOTQxLjAxYy4wOSA2LjUyLTYuNTEgOC41MS02LjYyIDEzLjg0IDguMDcgMS43MSAxOS42Ni03LjggMjcuOTYtNS40Ni0xMy4wMSA1LjE5LTI5LjcxIDkuNzQtNDMuNDggMTQuMzUgNy40OS02LjYgMTUuMzctMTUuMjcgMjIuMTQtMjIuNzNtOTMuMTQtMzYuNTljLTEyLjI4IDE0LjM2LTIxLjM2IDI3LjI0LTM5Ljk4IDMzLjAyLTMuMS45Ny02LjQyIDIuODUtOS42NiAzLjE4bC4yOS0xLjMxYzYuODUtNC41NCAxOS4wNS03LjMzIDI1LjY0LTEyLjIgOC4xMS02IDE0LjQzLTE4LjAzIDIzLjcxLTIyLjY5Ij48L3BhdGg+PHBhdGggZmlsbD0iI2ZjNTkxZiIgZD0ibTEwMTMuMjcgNzAyLjEzOSA3LjQ1IDkuNTQyYzE2LjA1IDE2LjU1NyAzMy41MiAzNy4wNTMgNDkuMDkgNTQuNDE0bDExOS40NyAxMzUuMjg4IDg5LjgzIDEwMi41NzdjMTAuNTcgMTIuMTggMjkuOTggMzIuOTUgMzguOTMgNDQuOC0xLjkzIDIuMTktMTQuNSAxNi44NC0xNS41NCAxNy41OS0zLjQyIDUuNDgtMTcuMTQgMjAuNjYtMjEuOCAyNi4wMWwtNTEuNTQgNTguNDItMTMzLjE1IDE1MC45MWMtMjcuNzEgMzEuMzEtNTcuNTQgNjMuNzctODMuOCA5Ni4xNiAxLjc2LTIwLTEuMDQtNTEuNjUuMzEtNzQuNDcgMy41OS01Ljc0IDE1LjQ4LTE4LjYgMjAuNTQtMjQuMzJsMzkuMzktNDQuNTMgMTQ0Ljg3LTE2My45OGM2Ljc1LTcuNjggMzYuMzYtMzkuMjEgMzguOTEtNDUuMjgtOC4xNi02LjM1LTI3Ljk1LTMwLjItMzUuMTItMzguOC02LjEyLTUuMjctMzUuOTgtNDAuMDU5LTQzLjE2LTQ4LjEyOGwtMjkuMjQtMzIuNzc3Yy0zLjc2LTQuMTk1LTEyLjMtMTMuMTY4LTE1LjA0LTE3LjQ5NS04LjM0LTcuODY2LTIwLjgyLTIyLjkzOC0yOC40OS0zMS43OTEtMTIuMzItMTIuMjI0LTQyLjM4LTQ1Ljk1OC01My40MS01OS41NTMtNi40LTYuNDM4LTE4LjE5LTIwLjMxMi0yMy44Ni0yNy40NTctNC43My00LjgyNi0xMC41LTEyLjA4OS0xNC45Ny0xNy40MTZ6Ij48L3BhdGg+PHBhdGggZmlsbD0iI2U0MmYwZSIgZD0iTTEzMTUuNSAxMDQ4LjU1Yy0xNC44Ni0xNC43NC00MC4wNS00NS4yMi01NC40MS02MS43NzhsLTk2Ljg4LTExMC43NzgtODkuNDgtMTAxLjA4N2MtMTQuMjQtMTUuODAzLTQyLjc1LTQ1LjczNi01NC44Ny02MS44OGwuODYtMS4zNDZjMTYuMDUgMTYuNTU3IDMzLjUyIDM3LjA1MyA0OS4wOSA1NC40MTRsMTE5LjQ3IDEzNS4yODggODkuODMgMTAyLjU3N2MxMC41NyAxMi4xOCAyOS45OCAzMi45NSAzOC45MyA0NC44LTEuOTMgMi4xOS0xNC41IDE2Ljg0LTE1LjU0IDE3LjU5bC0uNTMtMS4yOGM0LjQ1LTYuMDkgOC41OC0xMC44MiAxMy41My0xNi41Mm0tOTQuMzktNDIuMDhjNi4xMyAyLjcxIDMzLjk2IDMyLjY4IDM1LjEyIDM4LjgtOC4xNi02LjM1LTI3Ljk1LTMwLjItMzUuMTItMzguOG0tMTE1LjkzLTEzMC4xOTFjNi42NiAxLjM2MyAyNi40NyAyNS4wMjUgMjguNDkgMzEuNzkxLTguMzQtNy44NjYtMjAuODItMjIuOTM4LTI4LjQ5LTMxLjc5MW0tNzcuMjctODcuMDFjNy4wOSAxLjgxMSAxOS4wNSAxOC4yMzQgMjMuNTEgMjQuMzQ4bC4zNSAzLjEwOWMtNi40LTYuNDM4LTE4LjE5LTIwLjMxMi0yMy44Ni0yNy40NTciPjwvcGF0aD48cGF0aCBmaWxsPSIjNjkyMTg0IiBkPSJNMTAwMi43MiAyNDAuNTg4Yy0xLjIzIDEwLjE3OC0uNjcgMjIuMDU1LS44NCAzMi40MDItLjMyIDIwLjM5NC41MyA0MS41MDYtLjA0IDYxLjg0Ny41NiAxNy42NzEuMzEgMzYuMDYuMzIgNTMuNzkzLTcxLjQ5OSA3My4zNDItMTMzLjEgMTg2Ljk2OC0xNTEuNzYyIDI4OC4xNzYtNS42MjggMzAuNTE5LTYuODA3IDU5LjMzNS02LjQyNSA5MC4yMjlhNTk2LjUgNTk2LjUgMCAwIDAgOC43MTggOTEuODE2YzIuMTEzIDEyLjAwNyA2LjA5MSAyNi40MDQgNy43NjUgMzcuNDU4IDMuMjYxIDEwLjIzIDYuNTAxIDIxLjg3MyAxMC4xMjYgMzEuODA3LTUuODU1LTcuNjM0LTExLjE0LTE5LjUwOS0xNS4xODUtMjguMzc1LTMuNTk1LTYuMTM5LTkuNDAzLTIxLjAzNi0xMi4xNS0yNy45NjEtMjIuNTE4LTU2Ljc2MS0zOC4yNTgtMTMyLjEzOS0zOC4xNTEtMTkzLjIyNGE1NjEuOSA1NjEuOSAwIDAgMSAxMDEuMzg1LTMyNC4zMDRjOC44NjUtMTIuNzYgMjcuOTM3LTM5LjY5MyAzOC43OTQtNTAuNTQ3YTc5MSA3OTEgMCAwIDEgNTcuNDQ1LTYzLjExNyI+PC9wYXRoPjxwYXRoIGZpbGw9IiMyOTBjM2QiIGQ9Ik0xMDAyLjcyIDI0MC41ODhjLTEuMjMgMTAuMTc4LS42NyAyMi4wNTUtLjg0IDMyLjQwMi0uMzIgMjAuMzk0LjUzIDQxLjUwNi0uMDQgNjEuODQ3LS43NS00Ljk4Ni0uNDgtMjYuMzY5LS40LTMyLjIwOC4yOC0xOS45ODEtLjAzLTM3LjA4Ny0xLjIxLTU3LjAyM2wtMTYuMTgyIDE3LjI4Yy0zLjI0NiAzLjExNi00Ljc4MiA0LjY0Mi03LjUyMiA4LjE4NWwtMS4xMTEgMS4yODhjLTIuODAyIDIuOTQxLTYuNjA1IDYuNjc5LTkuMDQyIDkuNzgzLTMuOTA5IDQuNDU0LTE2Ljc5NSAyMC44NzQtMjEuMDk4IDIxLjU2M2E3OTEgNzkxIDAgMCAxIDU3LjQ0NS02My4xMTdNODYwLjQ1NiA4OTYuMzA5YzMuMjYxIDEwLjIzIDYuNTAxIDIxLjg3MyAxMC4xMjYgMzEuODA3LTUuODU1LTcuNjM0LTExLjE0LTE5LjUwOS0xNS4xODUtMjguMzc1bC43MzYtLjk5MmMzLjQyOSAzLjI1NiAxLjY0MiA1LjgxNSA0LjYzNiA3LjYzMS4yMjUtMi40NzktLjk4LTYuMjg3LTEuNDg1LTguOTQ0eiI+PC9wYXRoPjxwYXRoIGZpbGw9IiM0MDEyNWEiIGQ9Ik05NzUuNDE1IDI3Mi4zNTljLTEuMzY2IDMuMjYyLTYuMTk4IDcuNjcxLTkuMDQyIDkuNzgzIDIuNDM3LTMuMTA0IDYuMjQtNi44NDIgOS4wNDItOS43ODNtOC42MzMtOS40NzNjLS45OSAyLjczOS01LjE3MiA2LjI4Ny03LjUyMiA4LjE4NSAyLjc0LTMuNTQzIDQuMjc2LTUuMDY5IDcuNTIyLTguMTg1Ij48L3BhdGg+PHBhdGggZmlsbD0iIzY5MjE4NCIgZD0iTTY4Mi41NTggMTkyOC4wOWMzNC40OTgtMi4zNCA3Mi43LTQuMDcgMTA2Ljg5MS04LjU2YTc1Ni43IDc1Ni43IDAgMCAwIDE2MS4wNTQtNDAuNjVjMTQuOTM4LTUuNTUgNDAuMjU4LTE0Ljc0IDUxLjY2Ny0yNS4yNC0uMTggNDIuNzktLjc0IDg3LjkxLjA4IDEzMC42NC04Ljk2MiA0LjIzLTE2LjIgNy41OC0yMy44NzMgMTMuOTctMjUuMzQzLTMuMTMtNTAuODE1LTQuNDEtNzYuMjI1LTcuODdhOTg5IDk4OSAwIDAgMS0yMzIuMTE0LTU5Ljg2Yy0yLjQ3LS44LTEuNTQzLS4wNC0zLjEzNS0xLjg2IDQuMzU0LTEuMTkgMTAuOTM5LS42NyAxNS42NTUtLjU3Ij48L3BhdGg+PHBhdGggZmlsbD0iIzQwMTI1YSIgZD0iTTY3MC4wMzggMTkzMC41MmMtMi40Ny0uOC0xLjU0My0uMDQtMy4xMzUtMS44NiA0LjM1NC0xLjE5IDEwLjkzOS0uNjcgMTUuNjU1LS41Ny00LjI5MiAxLjI2LTkuMjk3IDEuMTItMTIuNTIgMi40MyI+PC9wYXRoPjxwYXRoIGZpbGw9IiNmYzU5MWYiIGQ9Ik0xMDEzLjU5IDg4OC44MjdjOS4xNCAxMi4yMTUgMjcuNDIgMzEuNDI5IDM4LjE0IDQzLjQwOWw2NS4xNCA3My4zNDRjMTEuODYgMTMuMzMgMjYuMzUgMjguNDMgMzcuMzcgNDIuMTZsLjQ4IDEuOTctNzcuODkgODcuMjZjLTEwLjMzIDExLjYyLTI2LjM4IDMxLjMzLTM2Ljk4IDQxLjQyLTMuMDQgMy41LTI1LjA0IDI5LjQ0LTI2LjI3IDI5LjkyLS44My0zLjkxLS40MS03LjU2LS4yMy0xMS41OHEtLjMxNS0zMC45OS0uMy02MS45OGMyNC41Ni0yOS40NiA1NC43NC01OC42MyA3OS4xMy04OC42NC00LjU4LTIuNjMtOS42Ni04Ljc1LTEzLjI5LTEyLjgyLTEuNjItMS4zMS0xMS43MS0xMi43MS0xMy4zOS0xNC42Mi0xMC41LTExLjg0LTIyLjEyLTI0LjI0Ny0zMS43OS0zNi43NzFhNjE4IDYxOCAwIDAgMC0yMC41Mi0yMi4xOTNjLjE4LTIzLjExNS43OS00Ny45MDEuNC03MC44NzkiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJNMTAxMy41OSA4ODguODI3YzkuMTQgMTIuMjE1IDI3LjQyIDMxLjQyOSAzOC4xNCA0My40MDlsNjUuMTQgNzMuMzQ0YzExLjg2IDEzLjMzIDI2LjM1IDI4LjQzIDM3LjM3IDQyLjE2bC0uODYuNjRjLTExLjAxLTkuMjgtNDAuNDYtNDMuOS01MS43MS01Ni42ODVsLTg2LjA3LTk2LjkzN2MtMS4zNSAxNS45NTUtLjkxIDQ2LjE4NC0uNzggNjIuNjU1IDUuMTUgNi45NTcgMTguNjEgMTYuODMyIDE4Ljg5IDI0LjQ4NmE2MTggNjE4IDAgMCAwLTIwLjUyLTIyLjE5M2MuMTgtMjMuMTE1Ljc5LTQ3LjkwMS40LTcwLjg3OW0tLjI0IDMwNy45MDNjMS43Ni0zLjEgMS4yLTEwLjA0IDEuMTItMTQuMDhsLS4wMy0xLjM3Yy4wNSAyLjIuMTIgNC40MS4yMSA2LjYxLjE2IDMuODQtLjAzIDguODMgMi44NyAxMS40OSA0Ljc3LTEuNjMgMTUuNDctMTkuMjcgMjIuMzMtMjAuOTktMy4wNCAzLjUtMjUuMDQgMjkuNDQtMjYuMjcgMjkuOTItLjgzLTMuOTEtLjQxLTcuNTYtLjIzLTExLjU4bTY1LjU0LTE2My40NGMzLjkyLjUxIDEyLjQ2IDguOTkgMTMuMjkgMTIuODItNC41OC0yLjYzLTkuNjYtOC43NS0xMy4yOS0xMi44MiI+PC9wYXRoPjxwYXRoIGZpbGw9IiNmYzU5MWYiIGQ9Ik0xODUxLjMgMTUwMS44NGM0LjczLTUuNjcgMTEuMzQtMTQuMTMgMTYuNjgtMTguODNsLTE1LjU4IDI4LjEyYy01Ljc0IDEyLjEzLTE3Ljg1IDMxLjItMjUuMDggNDIuNzJhOTUzLjggOTUzLjggMCAwIDEtMTU0Ljc2IDE4Ny4yOGMtNC4zIDQuMDItMjAuMzYgMjAuMTEtMjMuODEgMjEuOTItMTAuMDMgOS42My01My4zIDQ1LjUxLTY0LjQzIDUxLjU5bC05LjUyIDcuNjEtLjAzLTQuNTNjMTMuODktMTguMzEgMzMuNjMtMzkuNzQgNDguOTUtNTcuMTdsNjkuNjgtNzkuMzljMzkuODctNDQuOTggNzkuODktOTMuNjUgMTIwLjU4LTEzNy4zNSA1LjExLTYuMSAxMC42Ni0xMi4wOCAxNi4wMS0xOCA0LjY5LTYuMyAxNS42Ny0xNy43NyAyMS4zMS0yMy45NyI+PC9wYXRoPjxwYXRoIGZpbGw9IiNlNDJmMGUiIGQ9Ik0xNTg0LjMyIDE4MTQuNjRjLjUxLTEuNS40NC0xLjg1IDEuNTMtMi45MyAzLjk2LTMuOTIgOC40LTcuMzQgMTIuOC0xMC43NSAxNS44OC0xMi4zIDMxLjc0LTI0LjY0IDQ3LjAxLTM3LjY5IDEuMDMtLjA3IDIuMDYtLjE1IDMuMDktLjIyLTEwLjAzIDkuNjMtNTMuMyA0NS41MS02NC40MyA1MS41OW0yNjYuOTgtMzEyLjhjNC43My01LjY3IDExLjM0LTE0LjEzIDE2LjY4LTE4LjgzbC0xNS41OCAyOC4xMi0xLjItLjA5LjAxLTEuMzZjMS43NS0yLjYgMi44NC0zLjY2IDMuMDItNi43OHptLTIxLjMxIDIzLjk3Yy40NCA1Ljc1LTEwLjA5IDE2Ljk2LTE2LjAxIDE4IDUuMTEtNi4xIDEwLjY2LTEyLjA4IDE2LjAxLTE4Ij48L3BhdGg+PHBhdGggZmlsbD0iI2ZjNTkxZiIgZD0ibTE1OTEuMzQgMjkxLjE4OCAxLjA1LTEuMjQzYzIuMTEuMTgxIDMuNDcuNDM2IDUuNTYuODNsMi4yNCAxLjY0MWM5Mi45MyA2Ny4zMzIgMTk0LjcgMTg5LjAwMSAyNDkuNzEgMjg4Ljk4NiA0LjkxIDguOTMyIDE1Ljk5IDI4LjUyMiAxOS42MSAzNy4zMi0xOC4zLTIyLjY0My0zNi4zNS00Mi41NjctNTUuNDItNjQuNTMzbC02My4zNC03My42MDdjLTE1LjMtMTcuNTM4LTM5Ljg2LTQzLjgyNy01My4yNi02MS45OTItMy40NS0yLjMyNi03LjMxLTcuNTEyLTkuOTQtMTAuODcyLTM0LjAzLTM2LjExMy02Ny42My04MC43NzQtMTAxLjIzLTExNi40MTN6Ij48L3BhdGg+PHBhdGggZmlsbD0iI2U0MmYwZSIgZD0iTTE2MDAuMTkgMjkyLjQxNmM5Mi45MyA2Ny4zMzIgMTk0LjcgMTg5LjAwMSAyNDkuNzEgMjg4Ljk4NiA0LjkxIDguOTMyIDE1Ljk5IDI4LjUyMiAxOS42MSAzNy4zMi0xOC4zLTIyLjY0My0zNi4zNS00Mi41NjctNTUuNDItNjQuNTMzbC02My4zNC03My42MDdjLTE1LjMtMTcuNTM4LTM5Ljg2LTQzLjgyNy01My4yNi02MS45OTIgOS4xOSAzLjM2OCAxMzAuNDYgMTUyLjA3NiAxNTIuNTcgMTcyLjE1Ni45NS00Ljk2OS0xNC4wNi0yOS44MTgtMTcuMzMtMzUuMDQ3YTEwMzMgMTAzMyAwIDAgMC0xNjcuMzItMjA1LjE2OGMtMjAuMjctMTkuMTgtNDEuMi0zNi4xNjMtNjIuNy01My44NjQtMS40OS0xLjIzMy0yLjA4LTIuMzY4LTIuNTItNC4yNTEiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJtMTU4Ni4zMiAyOTEuMzA1IDUuMDItLjExN2MxMS43OSAxNi44MzQgOTUuODkgMTEwLjY1MyA5Ni4yMSAxMTYuNTMtMzQuMDMtMzYuMTEzLTY3LjYzLTgwLjc3NC0xMDEuMjMtMTE2LjQxMyI+PC9wYXRoPjxwYXRoIGZpbGw9IiM2OTIxODQiIGQ9Ik05ODMuMzMgNTgyLjc1OWM1Ljc2OC0xMS44ODQgMTMuMjMzLTI0LjMxOCAxOS44Ny0zNS44NzgtMS4wNyA3Ljg0Ny0xLjE2IDE0LjM1Ni0xLjM2IDIyLjI5MS43OCAyMS4xMS40MyA0NS40NTEuMjUgNjYuNzQyLTI5Ljk0OCA0MC45My01MS4xNzYgNzMuODkxLTY4LjA3NyAxMjIuMjgzIDUuMTAzLTU0Ljc4MyAxNC41MjQtOTguNTcyIDM2LjgxLTE0OS40ODMgMi4xOTMtNS4wMDkgOS43NzMtMjIuMzkgMTIuNTA3LTI1Ljk1NSI+PC9wYXRoPjxwYXRoIGZpbGw9IiMyOTBjM2QiIGQ9Ik05ODMuMzMgNTgyLjc1OWM1Ljc2OC0xMS44ODQgMTMuMjMzLTI0LjMxOCAxOS44Ny0zNS44NzgtMS4wNyA3Ljg0Ny0xLjE2IDE0LjM1Ni0xLjM2IDIyLjI5MS0xLjY2LTMuNDItMS42Mi01LjQ2Mi0xLjk1Mi05LjI2MWwtLjk5OC0uNzAyYy01Ljc1NCA0Ljk4Mi05LjgyMyAyMS43MTYtMTUuNTYgMjMuNTUiPjwvcGF0aD48cGF0aCBmaWxsPSIjZTQyZjBlIiBkPSJNMTU3Ny40OCAyNzUuNTVjNi42IDQuNzU2IDE0LjMzIDEwLjAzOSAyMC40NyAxNS4yMjUtMi4wOS0uMzk0LTMuNDUtLjY0OS01LjU2LS44M2wtMS4wNSAxLjI0My01LjAyLjExN2MtMy4zMy0zLjA1OS04LjU1LTkuMjU2LTExLjc2LTEyLjg2NnoiPjwvcGF0aD48cGF0aCBmaWxsPSIjMjkwYzNkIiBkPSJtODYxLjI0IDEyNDIuNDEgMS4yNDktLjczYzIuMzUtLjA0IDEuOTA3LjQyIDMuNDk5LTEuMzNsLTEuOTc5LS4yMi0uNDE1LS41My41MTEtMS45N2MxMy44NzYgNS44NSAyOC41ODEgOS43MiA0MS40NTMgMTUuMzItMTMuNDU3LTIuMTEtMzAuODk3LTYuOTEtNDQuMzE4LTEwLjU0bTQ0LjE2MS0xMjUuNDljOS4wMDEgNy4yOSAxNy40NjQgMTMuMDUgMjYuOTg3IDE5LjYxLTExLjg2NC00LjU5LTIxLjI1OC0xMC4xOC0zMi40NjItMTUuMDN6bTY5LjQ3IDMxMy40YzguOTY3LTEuOTQgMTkuOTM4LTQuNjMgMjguODI5LTYuMTJsLTIxLjM2IDkuMjZjLTMuMTM1LTYuNy4wODUuNDYtNy40NjktMy4xNCI+PC9wYXRoPjxwYXRoIGZpbGw9IiNiZTJhMGIiIGQ9Ik0xNTc0LjU2IDI3OC40MzljLTQuODctNS42MjYtMTEuODMtMTIuNTQ0LTE3LjA4LTE4LjE5NiA2LjU4IDQuNTY4IDEzLjYyIDEwLjMyNCAyMCAxNS4zMDd6bS4yMSAxNTM5LjI4MS4wMyA0LjUzYy0yLjMzIDEuOTMtMi42OSAyLjU4LTUuNjQgMy4yNS42NC0zLjExIDMuMzMtNS4zMiA1LjYxLTcuNzgiPjwvcGF0aD48cGF0aCBmaWxsPSIjYjVhZWI1IiBkPSJNOTQ2LjkzMSAxMzM1LjgyYzMuNDkxLS44MSAyLjIwOS0xLjI0IDQuNTk0LS4wMy0xLjc2MS45LTEuMzQuODgtMy4yMTkgMS4yM3oiPjwvcGF0aD48cGF0aCBmaWxsPSIjYjY2YzY5IiBmaWxsLW9wYWNpdHk9Ii40NTkiIGQ9Im05Ni4xNTYgMTQ1Mi4zMiAxLjQxOC4xNSAyLjI3MSA2LjE3Yy0zLjQ5Ni0yLjMzLTMuMDEzLTIuNTItMy42ODktNi4zMiI+PC9wYXRoPjxwYXRoIGZpbGw9IiNiZTJhMGIiIGZpbGwtb3BhY2l0eT0iLjg3MSIgZD0iTTIwMjEuNzQgMTIxNy4yMWMuNjEtMy40Ni43My02LjU2IDIuODEtOS4yOCAxLjM2IDMuMDQuNjQgNC41MS4yOCA4LjIxeiI+PC9wYXRoPgo8L3N2Zz4=" alt="JEXTEN emblem">
+  </div>
+
+  <div class="footer-title">JEXTEN HOLDINGS ENTERPRISE</div>
+
+  <p class="footer-legal-notice">
+    CONFIDENTIALITY & LEGAL GOVERNANCE DISCLOSURE: JEXTEN Holdings is a registered multinational enterprise entity. Information provided herein is strictly for statutory review, enterprise audit, and institutional partner governance. All intellectual assets, operational frameworks, and strategic capability designations are subject to international copyright law and proprietary asset protection protocols. Unauthorized replication or dissemination without prior executive consent is prohibited.
+  </p>
+
+  <div class="footer-divider"></div>
+
+  <div class="footer-copy">
+    © 2026 JEXTEN HOLDINGS INC. • INSTITUTIONAL GOVERNANCE & MULTI-SECTOR MANAGEMENT • ALL RIGHTS RESERVED
+  </div>
+</footer>
+
+<script>
+
+  // SECTION 1: Quantum Space background + vector logo self-assembly (centered)
+  const DATA = [{"k": "o", "d": "M1090.97 113.723c-4.47-5.192-8.39-9.595-13.16-14.502 18.08 1.519 31.45 1.81 50.17 4.125l3.15.451 11.99.289 557.91 634.404 183.94 209.618c29.14 33.148 60.23 67.342 88.69 100.762-1.35 1.54-11.11 12.78-12.01 13.5-2.98 4.2-11.86 13.87-15.57 18.12l-30.43 34.84-111.34 125.97-345.73 390.87-220.14 251.88-57.98 66.4c-6.98 8.1-24.62 30.52-31.56 35.5-14.05 10.08-55.42 8.56-73.66 12.54l498.53-568.79 213.64-243.02c41.04-46.29 81.79-92.82 122.27-139.61l-5.1-5.95c-14.11-15.62-33.46-37.2-46.21-53.602-4.45-3.059-92.63-104.599-93.69-106.471-5.67-5.126-20.45-22.47-25.5-28.801-2.19-1.601-21.22-23.302-24.52-27.2-20.56-24.25-45.43-49.639-65.05-74.353-7.33-6.756-23.63-26.508-30.46-34.411-3.71-2.639-35.02-39.267-39.91-44.972-6.38-6.93-14.7-15.739-20.23-23.144-3.66-2.14-134.68-152.596-147.23-168.109a500 500 0 0 1-19.29-21.719c-2.68-1.994-15.14-16.6-17.89-19.923-24.43-29.572-52.8-58.002-76.76-87.706-7.16-7.36-16.65-18.844-23.22-26.81-6.88-5.998-17.75-19.461-23.82-26.884-6.58-6.929-13.05-14.858-19.26-22.184-7.21-6.763-39.17-43.662-44.6-51.103-14.27-14.875-33.65-37.483-46.79-53.398-2.61-2.153-19.48-21.795-22.3-25.281-7.68-9.502-19.93-21.936-26.88-31.326", "f": "#fc591f", "op": null}, {"k": "o", "d": "m1131.13 103.797 11.99.289 557.91 634.404 183.94 209.618c29.14 33.148 60.23 67.342 88.69 100.762-1.35 1.54-11.11 12.78-12.01 13.5l-.51-.5c.06-2.11 7.32-10.52 9.17-12.87-7.46-10.08-20.74-23.91-29.38-33.82l-68.69-78.229-241.4-275.393a28323 28323 0 0 0-236.5-268.951c-31.86-36.075-62.67-72.158-94.94-107.996l-120.41-136.382a1141 1141 0 0 1-21.43-24.251c-4.1-4.841-9.1-10.928-13.24-15.681-3.29-3.768-7.95.216-13.19-4.5m9.02 66.533c4.98 1.007 46.15 47.446 46.79 53.398-14.27-14.875-33.65-37.483-46.79-53.398m718.22 817.188c5.18.788 46.07 48.592 46.21 53.602-14.11-15.62-33.46-37.2-46.21-53.602m-767.4-873.795c-4.47-5.192-8.39-9.595-13.16-14.502 18.08 1.519 31.45 1.81 50.17 4.125-9.69 4.926-32.83-4.978-40.98-.29.26 4.843 3.87 6.036 3.97 10.667m528.18 602.559c6.89 2.173 25.38 25.346 30.57 31.872.33 2.069.57 1.256-.11 2.539-7.33-6.756-23.63-26.508-30.46-34.411m-344.53-392.383 1.57-.917c4.87 5.002 21.73 21.604 21.65 27.727-7.16-7.36-16.65-18.844-23.22-26.81m464.56 528.347c6.37 1.991 23.78 22.363 25.5 28.801-5.67-5.126-20.45-22.47-25.5-28.801m-507.64-577.415 1.72-.702c5.08 4.993 17.15 15.803 17.54 22.886-6.58-6.929-13.05-14.858-19.26-22.184m327.47 373.335c5.94 2.875 18.29 16.103 21.13 21.899l-.9 1.245c-6.38-6.93-14.7-15.739-20.23-23.144m-166.52-189.828c5.93 1.289 18.83 15.787 19.29 21.719a500 500 0 0 1-19.29-21.719", "f": "#e42f0e", "op": null}, {"k": "p", "d": "M379.111 352.009c-2.437 5.483-4.299 12.12-6.125 17.908-3.333 18.292-7.433 28.755-11.593 46.137a1136 1136 0 0 0-16.321 79.92c-1.307 7.369-2.256 14.491-2.216 21.988.108 20.128-4.948 39.293-6.912 59.178a744.6 744.6 0 0 0 28.817 288.768c5.999 20.169 14.849 40.084 21.549 60.202 10.33 21.552 18.087 41.513 29.558 63.196a682.5 682.5 0 0 0 70.986 107.644c10.893 13.57 22.184 25.68 33.113 38.9 2.606 1.89 16.243 15.5 18.324 18.11 81.632 78.41 159.797 127.67 267.024 162.5 30.837 8.44 60.108 15.85 92.112 17.82 4.017.25 11.213.71 14.905 1.71 11.427.06 23.208.29 34.599-.17l1.375 1.2a249 249 0 0 1-36.676 5.25l-1.189.48c-92.489 6.4-184.936-15.86-269.671-51.81-7.079-3-10.914-4.66-15.933-7.39a496 496 0 0 1-30.951-14.3c-9.048-3.89-22.449-11.66-31.171-16.4-49.962-27.19-94.431-59.86-135.183-99.53-14.163-13.78-27.239-25.57-39.76-41.54-27.162-29.88-70.534-89.45-89.535-124.958-58.533-96.576-94.12-217.43-112.389-328.224-2.587-21.173-10.88-34.332-.114-54.58 31.108-58.506 66.756-116.542 111.121-166.35 3.663-4.597 8.013-9.37 11.922-13.834 3.264-4.662 11.239-13.209 15.443-17.152 13.382-15.63 38.916-42.127 54.891-54.673", "f": "#692184", "op": null}, {"k": "p", "d": "M805.315 1316.46c-8.063.93-24.86-6.13-33.08-9.01-70.441-24.68-134.839-65.07-191.844-112.86-7.005-5.87-41.46-33.93-42.1-40.63 81.632 78.41 159.797 127.67 267.024 162.5m-285.348-180.61c-5.909-2.39-17.996-17.18-22.6-22.79-42.453-51.7-90.632-121.628-111.995-185.457l.938-1.493c10.33 21.552 18.087 41.513 29.558 63.196a682.5 682.5 0 0 0 70.986 107.644c10.893 13.57 22.184 25.68 33.113 38.9m-221.73-149.028 1.539-.613c20.264 34.931 44.034 68.111 68.94 99.861 4.05 5.16 18.898 21.58 19.056 25.71-27.162-29.88-70.534-89.45-89.535-124.958", "f": "#40125a", "op": null}, {"k": "p", "d": "M379.111 352.009c-2.437 5.483-4.299 12.12-6.125 17.908l-1.202-.567c.491-3.016 1.53-5.31.304-7.247-6.885.607-39.87 42.567-47.868 44.579 13.382-15.63 38.916-42.127 54.891-54.673m533.221 983.981c11.427.06 23.208.29 34.599-.17l1.375 1.2a249 249 0 0 1-36.676 5.25c3.716-2.09 6.225-2.4 10.425-3.4-3.406-.91-6.366-1.81-9.723-2.88", "f": "#290c3d", "op": null}, {"k": "p", "d": "M593.886 1269.25c5.773-.64 24.543 9.27 30.004 12.14.291.6.848 1.58.947 2.16a496 496 0 0 1-30.951-14.3M308.777 423.834c.04 5.233-5.835 13.517-11.922 13.834 3.663-4.597 8.013-9.37 11.922-13.834", "f": "#40125a", "op": null}, {"k": "p", "d": "M457.745 284.73c65.274-46.127 129.392-86.087 203.82-116.143 18.767-7.579 37.777-14.758 56.376-22.646-23.258 27.158-38.809 51.219-58.387 81.135-24.862 45.158-54.726 86.959-74.842 135.194-5.038 12.082-9.452 24.313-14.091 36.505a850 850 0 0 0-36.059 123.027c-23.157 114.271-13.32 253.247 23.834 363.202 45.448 136.586 131.617 240.036 248.66 321.486 11.407 6.58 21.907 12.85 33.628 18.93 4.304 2.23 20.609 10.07 23.421 12.21l-.511 1.97.415.53 1.979.22c-1.592 1.75-1.149 1.29-3.499 1.33l-1.249.73c-41.061-9.95-107.91-42.33-142.24-66.47-11.138-5.95-31.549-21.81-41.22-29.99-25.847-20.59-41.391-34.16-64.514-57.68-12.031-9.72-35.9-37.85-45.465-50.45-26.309-31.24-58.792-79.528-77.573-115.634-9.47-13.367-20.824-43.253-27.743-58.906-10.047-22.731-17.66-48.732-25.167-72.457-2.888-9.128-6.05-18.436-8.485-27.7-23.477-111.295-26.569-233.008-9.879-345.598 3.908-26.358 13.15-59.23 19.483-85.069 3.659-14.93 7.951-25.254 10.791-41.282 2.836-2.515 5.415-4.254 8.517-6.444", "f": "#692184", "op": null}, {"k": "p", "d": "M457.745 284.73c65.274-46.127 129.392-86.087 203.82-116.143 18.767-7.579 37.777-14.758 56.376-22.646-23.258 27.158-38.809 51.219-58.387 81.135-.5-8.174 40.22-61.159 47.751-72.508-3.012-.631-1.595-.931-4.036.001a1386 1386 0 0 0-59.456 24.335c-52.568 22.939-101.89 49.979-149.14 82.562-6.541 4.511-31.15 23.06-36.928 23.264", "f": "#40125a", "op": null}, {"k": "p", "d": "M558.396 885.004c45.448 136.586 131.617 240.036 248.66 321.486-.28.04-.56.07-.841.1-32.926-15.67-101.497-78.99-121.08-102.24-51.194-60.8-88.945-113.384-116.742-186.386-3.542-9.302-10.557-24.333-9.997-32.96", "f": "#290c3d", "op": null}, {"k": "p", "d": "m490.228 922.186 2.483.985c4.719 7.756 10.372 18.242 14.889 25.785a944 944 0 0 0 22.944 35.722c11.733 17.172 26.028 33.842 37.01 50.712l.247 2.43c-26.309-31.24-58.792-79.528-77.573-115.634", "f": "#40125a", "op": null}, {"k": "p", "d": "M613.266 1088.27c5.949 1.33 23.172 20.03 29.62 25.69 2.216 2.25 2.91 3.09 5.646 4.83 9.964 9.95 21.803 17.82 30.979 26.69l-1.731.47c-25.847-20.59-41.391-34.16-64.514-57.68", "f": "#290c3d", "op": null}, {"k": "p", "d": "M679.511 1145.48c4.092 2.65 38.572 27.69 39.809 29.61l-.32.85c-11.138-5.95-31.549-21.81-41.22-29.99zm-36.625-31.52c3.031 1.35 3.533 2.32 5.646 4.83-2.736-1.74-3.43-2.58-5.646-4.83", "f": "#40125a", "op": null}, {"k": "o", "d": "m1013.36 141.662 5.82 7.458 509.49 581.381 187.69 213.335 63.17 72.174c9.91 11.2 20.02 21.13 29.58 32.78-4.87 5.51-9.21 10.45-14.44 15.61-21.99 26.39-46.78 53.05-69.81 78.69l-95.88 108.23-368.85 418.48-169.64 196.09-38.31 44.32c-2.3 2.65-13.43 15.79-15.31 17.2a923 923 0 0 0-23.03 27.3c-2.11-7.25-.7-60.59-.57-71.35 9.3-13.24 32.05-37.12 43.46-50.46l118.7-136.24a49277 49277 0 0 1 355.92-405.62l150.2-169.46c18.92-21.54 48.69-52.23 65.25-74.36-18.04-22.17-41.5-44.18-59.21-67.231-7.07-7.251-18.08-19.699-24.22-27.579-4.78-3.165-20.08-22.035-24.3-27.271-4.64-3.072-31.61-35.235-36-41.03-3.23-1.638-34.09-37.917-38.29-43.076-8.57-8.582-23.79-26.432-31.48-35.687-1.9-1.485-21.99-24.068-24.77-27.4-15.13-18.179-34.62-37.708-48.95-56.044-6.49-6.301-26.59-30.113-32.2-37.372-5.82-4.147-32.35-35.664-38.61-43.294-6.49-7.298-12.91-14.378-18.96-22.065-8.11-7.392-28.38-31.729-36.86-41.483l-63.01-71.649-96.2-109.58c-22.79-25.606-47.52-52.306-69.17-78.836-5.78-5.426-20.75-23.592-26.36-30.348-6.13-3.811-56.96-65.3-64.95-74.83z", "f": "#fc591f", "op": null}, {"k": "o", "d": "m1019.18 149.12 509.49 581.381 187.69 213.335 63.17 72.174c9.91 11.2 20.02 21.13 29.58 32.78-4.87 5.51-9.21 10.45-14.44 15.61l-.68-.72c.88-2.79 8.51-9.93 11.51-13.86l.61-.82c-11.24-14.04-26.05-29.17-38.23-43.18l-111.15-126.151-409.7-468.365-117.82-134.092c-35.59-39.965-71.16-79.989-106.2-120.45-3.52-4.074-3.52-3.275-3.83-7.642m583.89 734.989c5.66 1.996 31.75 32.46 36.09 38.635l-.09 2.395c-4.64-3.072-31.61-35.235-36-41.03m-69.77-78.763c8.42 1.882 23.53 24.844 30.33 31.316 1.02.961 1.17 3.007 1.15 4.371-8.57-8.582-23.79-26.432-31.48-35.687M1427.38 684.53c5.41 1.577 32.08 32.258 32.2 37.372-6.49-6.301-26.59-30.113-32.2-37.372m-349.17-397.255c5.15 1.205 25.94 24.436 26.36 30.348-5.78-5.426-20.75-23.592-26.36-30.348m585.16 665.135c5.01.845 24 22.018 24.22 27.579-7.07-7.251-18.08-19.699-24.22-27.579m-649.53 1002.3c.31-2.52.33-3.01.04-5.45l-.25-2 1.43-1.57c10.02-2.12 13.66-16.83 21.81-18.28a923 923 0 0 0-23.03 27.3m355.97-1335.539 2.11-.185c4.58 4.41 16.94 15.726 16.85 22.25-6.49-7.298-12.91-14.378-18.96-22.065", "f": "#e42f0e", "op": null}, {"k": "p", "d": "M807.573 123.582c69.603-15.93 124.605-20.854 194.557-25.725-.04 15.241-.62 35.925.57 50.682-8.017 6.382-16.751 12.134-24.454 18.083-136.128 105.133-251.98 254.235-269.347 430.334-4.528 45.913-4.831 95.784 2.263 142.204 1.387 9.073.388 19.655 1.562 28.879 6.767 48.839 20.217 97.235 40.962 142.019 3.474 7.498 6.804 12.772 9.791 20.616 30.835 60.941 68.046 118.196 118.167 165.176 6.959 5.22 16.768 14.94 23.757 21.07l-5.475 4.58c-7.434-2.85-28.942-15.36-35.21-19.81-34.985-18.81-95.63-74.83-121.469-104.494-4.326-3.2-20.895-24.515-24.539-29.355-8.881-10.43-19.418-25.04-26.146-36.602-8.462-10.502-17.799-28.336-23.814-40.176-40.936-80.59-55.618-172.576-52.984-262.329.801-27.285-.507-55.79 2.817-83.192 2.969-24.43 7.559-60.13 13.867-83.479 26.969-99.817 75.206-200.297 133.784-285.383 7.192-10.446 33.085-45.725 41.341-53.098", "f": "#692184", "op": null}, {"k": "p", "d": "M881.644 1095.85c-5.506-.23-9.389-5.7-12.989-9.46-36.669-38.32-67.944-80.97-92.804-127.839-3.648-6.878-12.636-20.829-12.374-27.877 30.835 60.941 68.046 118.196 118.167 165.176", "f": "#40125a", "op": null}, {"k": "p", "d": "M743.247 997.196c4.103.383 7.942 5.154 10.979 8.284 5.115 4.47 6.725 6.12 11.087 11.33l7.334 7.26c2.85 4.33 12.603 13.82 16.823 16.81 4.801 5.31 18.371 16.4 24.479 21.02l1.843 1.49 4.176 3.53 1.811 1.45a208 208 0 0 0 27.167 20.38l2.57 1.77 3.271 2.08 1.338 1c2.49 1.87 8.197 5.13 8.591 8.09-34.985-18.81-95.63-74.83-121.469-104.494", "f": "#290c3d", "op": null}, {"k": "p", "d": "M754.226 1005.48c5.115 4.47 6.725 6.12 11.087 11.33-4.519-3.62-7.734-6.58-11.087-11.33", "f": "#40125a", "op": null}, {"k": "p", "d": "M692.562 931.239c4.586 1.829 26.439 32.174 26.146 36.602-8.881-10.43-19.418-25.04-26.146-36.602", "f": "#290c3d", "op": null}, {"k": "p", "d": "M772.647 1024.07c3.289 1.92 14.427 13.58 16.823 16.81-4.22-2.99-13.973-12.48-16.823-16.81", "f": "#40125a", "op": null}, {"k": "p", "d": "M131.546 721.647c1.657-3.634 3.723-8.549 5.646-11.925.905 4.69 2.728 13.065 3.143 17.568 7.619 22.764 9.744 57.706 15.549 82.844 13.445 58.229 33.134 111.723 52.554 167.843 10.883 24.223 20.5 47.003 32.209 70.943 32.779 67.04 70.225 118.12 119.09 173.73 4.086 4.06 30.742 30.17 32.449 33.38 51.216 46.52 105.286 86.96 167.39 118.18 5.258 2.64 11.389 5.44 16.393 8.41 27.743 11.31 54.925 22.77 83.382 31.71 92.429 29.05 191.179 31.47 286.699 19.63 7.209-.9 22.014-3.78 28.821-3.64 7.554 3.6 4.334-3.56 7.469 3.14-94.187 41.17-238.578 51.92-340.006 37.53a562.5 562.5 0 0 1-88.731-20.79c-14.087-4.52-33.577-11.02-46.8-17.64-16.96-5.92-51.526-22.05-66.887-30.93-11.17-4.61-30.459-16.02-40.999-22.31a886 886 0 0 1-109.021-75.48c-4.829-3.7-9.487-7.69-14.16-11.6a856.6 856.6 0 0 1-113.516-113.87c-3.817-4.38-6.647-7.59-10.006-12.41-21.769-23.37-63.958-85.18-79.194-113.37 1.327-33.14 1.747-60.34 4.706-93.918a897.6 897.6 0 0 1 53.82-237.025", "f": "#692184", "op": null}, {"k": "p", "d": "m359.737 1222.65-2.572-.67c-5.84-5.34-10.308-11.61-15.598-17.45-41.881-46.22-76.182-100.7-103.845-156.48-4.748-9.58-31.323-64.008-29.284-70.073 10.883 24.223 20.5 47.003 32.209 70.943 32.779 67.04 70.225 118.12 119.09 173.73", "f": "#40125a", "op": null}, {"k": "p", "d": "M392.186 1256.03c51.216 46.52 105.286 86.96 167.39 118.18 5.258 2.64 11.389 5.44 16.393 8.41l-.903.7c-6.804-1.22-24.201-11.26-30.704-14.79a726 726 0 0 1-128.548-88.67c-6.432-5.48-20.194-16.82-23.628-23.83", "f": "#290c3d", "op": null}, {"k": "p", "d": "M439.916 1401.63c4.63.58 65.779 28.54 66.887 30.93-16.96-5.92-51.526-22.05-66.887-30.93m-308.37-679.983c1.657-3.634 3.723-8.549 5.646-11.925.905 4.69 2.728 13.065 3.143 17.568-1.338-1.42-1.489-1.888-2.316-3.614l-.863-1.824c-3.155-1.6-1.398-1.206-5.61-.205m20.668 444.313 1.325-.78c4.815 4.16 6.841 6.18 9.695 11.98l-1.014 1.21c-3.817-4.38-6.647-7.59-10.006-12.41m123.522 126.28c5.254-.09 11.446 5.74 14.63 9.57l-.47 2.03c-4.829-3.7-9.487-7.69-14.16-11.6", "f": "#40125a", "op": null}, {"k": "p", "d": "M79.388 1158.52c15.14 21.5 35.039 47.97 48.795 69.55 45.93 61.04 95.442 118.8 153.535 168.62 12.357 9.2 25.631 21.48 37.792 31.32 3.426 2.78 17.303 13.82 19.709 16.3a1102 1102 0 0 0 68.318 46.45c10.204 6.31 30.403 16.89 38.562 22.69 18.675 8.18 32.068 15.5 51.974 22.03 21.959 9 42.783 16.12 65.693 22.59 24.162 6.83 47.965 7.71 72.199 11.74 64.818 10.79 126.496 5.2 191.01-3.09 7.98-1.02 17.043-4.97 25.104-6.31 7.224-1.58 15.025-2.53 22.097-4.22a889 889 0 0 0 103.815-32.63c4.578-2.63 8.901-4.35 13.734-6.42l11.145-5.51c-1.37 9.9-.8 29.1-.61 39.63-32.836 21.4-77.083 39.27-114.259 52.24-47.181 16.47-91.359 27.44-140.585 35.29-96.437 15.38-178.141 11.64-273.37-8.74-11.394-2.43-22.612-6.6-33.801-9.93-34.133-10.15-67.049-20.62-100.04-34.16-8.905-3.65-19.58-7.32-27.629-12.46-21.763-8.45-67.39-32.04-86.676-43.91-4.168-1.45-19.454-11.74-23.954-14.69-4.065-2.38-4.452-2.78-6.871-6.83-48.812-79.06-83.445-182.09-103.007-272.47-5.421-25.04-8.228-51.75-12.68-77.08", "f": "#692184", "op": null}, {"k": "p", "d": "M128.183 1228.07c45.93 61.04 95.442 118.8 153.535 168.62-7.316-.59-53.478-47.05-60.972-54.71-2.055-2.73-2.21-2.95-4.782-5.17-11.608-12.45-87.014-98.2-87.781-108.74", "f": "#290c3d", "op": null}, {"k": "p", "d": "M339.219 1444.31a1102 1102 0 0 0 68.318 46.45c10.204 6.31 30.403 16.89 38.562 22.69-9.855.23-103.544-59.93-106.88-69.14M225.9 1529.59c7.915-.14 48.447 25.78 60.376 29.76 4.206 1.4 23.72 10.51 26.3 14.15-21.763-8.45-67.39-32.04-86.676-43.91m765.825-12.45c-1.916 4.21-7.965 6.32-12.23 7.25l-1.504-.83c4.578-2.63 8.901-4.35 13.734-6.42m-796.65-9.07c3.831.22 6.128 1.37 7.401 5.25l-.53 1.58c-4.065-2.38-4.452-2.78-6.871-6.83m20.889-171.26c2.572 2.22 2.727 2.44 4.782 5.17-2.809-1.98-3.429-2.02-4.782-5.17", "f": "#40125a", "op": null}, {"k": "o", "d": "M1013.18 324.643c8.56 13.245 38.36 44.727 50.72 58.811l124 140.58 460.89 526.146c-8.15 7.94-14.67 14.88-22.31 23.27-8.53 11.77-27.71 31.32-38.11 42.98l-79.7 89.8-240.05 273.28-153.33 175.19-50.36 58c-5.08 5.76-18.14 21.18-23.32 25.77-3.48 4.67-23.33 27.76-27.34 31.21l-.65-.52c-1.08-22.33-.49-47.86-.44-70.41 16.37-21.02 40.55-47.18 58.39-67.18l88.97-100.47L1480 1167.32l65.72-74.2c12.3-13.74 29.4-31.95 40.48-46.13-6.37-3.67-23.71-25.12-28.97-31.62-5.12-4.57-40.53-44.418-43.84-49.649-4.88-4.347-20.16-22.175-24.35-27.583-2.73-1.478-9.48-10.125-11.76-12.906-3.06-2.149-31.02-35.141-35.24-40.071-3.76-2.599-32.57-36.994-36.71-41.95-12.95-13.206-24.34-26.83-36.3-40.89-3.39-2.835-16.44-18.582-19.49-22.455-6.04-5.931-15.38-17.216-20.41-23.755-2.35-1.346-29.26-32.419-31.47-36.014-8.75-8.256-25.98-29.623-34.51-39.851-2.2-1.52-16.24-17.984-18.82-20.955l-44.17-50.878-113.19-130.131c-17.36-20.011-38.22-42.504-54.46-62.916-5.19-5.293-14.96-16.456-19.39-22.33z", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1013.18 324.643c8.56 13.245 38.36 44.727 50.72 58.811l124 140.58 460.89 526.146c-8.15 7.94-14.67 14.88-22.31 23.27l.01-1.12c3.51-7.1 13.87-16.49 19.85-22.38-36.45-38.52-73.47-82.23-108.07-122.555l-112.98-130.101-409.9-465.339c-.18 15.133-2.35 45.526.55 60.071.28 1.368 14.81 19.468 17.19 22.467l-.62.873c-5.19-5.293-14.96-16.456-19.39-22.33zm355.85 477.678c5.34 1.065 33.19 33.433 37.08 39.231l-.78 1.659c-12.95-13.206-24.34-26.83-36.3-40.89m73.01 82.84c1.07.233 2.13.465 3.19.698 11.92 11.77 22.04 25.283 33.02 37.895l-.97 1.478c-3.06-2.149-31.02-35.141-35.24-40.071m-178.89-204.915c7.45 1.57 26.18 27.534 32.07 34.875.9 1.129 2 3.56 2.44 4.976-8.75-8.256-25.98-29.623-34.51-39.851M1015.93 1763.36c7.01-6.24 19.27-22.36 25.68-24.89-3.48 4.67-23.33 27.76-27.34 31.21l-.65-.52c.82-4.44.81-17.1.92-22.26.31 5.53.87 10.96 1.39 16.46m541.3-747.99c5.15.98 27.81 26.9 28.97 31.62-6.37-3.67-23.71-25.12-28.97-31.62m-68.19-77.232c6.79 3.517 22.54 20.086 24.35 27.583-4.88-4.347-20.16-22.175-24.35-27.583m-159.91-182.027c6.62 2.498 19.37 16.417 20.41 23.755-6.04-5.931-15.38-17.216-20.41-23.755", "f": "#e42f0e", "op": null}, {"k": "p", "d": "M265.858 1620.38c19.743 11.27 42.824 21.11 61.263 32.36 25.621 11.81 56.936 28.42 82.35 38.28a792.5 792.5 0 0 0 303.208 52.31c28.7-.72 53.068-.97 81.056-8.11 6.181-1.58 14.726-1.27 21.178-2.95 14.74-3.84 29.349-7.75 44.253-10.94 6.989-1.17 16.791-6.33 23.569-7.53 8.565-1.51 30.047-11.49 37.185-11.88 10.668-6.13 28.962-12.28 40.821-16.44 14.97-9.08 26.567-14.29 42.089-24.54-2.71 23.35-1.12 62.21-.56 86.38-32.679 22.37-69.751 42.25-106.71 56.58-13.082 5.07-26.512 8.93-39.748 13.53-27.753 9.65-56.357 18.9-85.191 24.79-7.704 1.58-15.565 2.36-23.294 3.82-9.567 1.81-19.078 4.26-28.712 5.64-10.163 1.45-20.418 1.99-30.594 3.29-11.391 1.45-22.559 4.32-33.995 5.54-20.278 2.18-40.914 1.62-61.278 1.52-15.436-.08-41.287 2.31-55.464-.66-23.443-4.9-130.266-86.61-145.62-105.71-43.664-36.61-89.807-91.19-125.806-135.28", "f": "#692184", "op": null}, {"k": "p", "d": "M265.858 1620.38c19.743 11.27 42.824 21.11 61.263 32.36-7.077.66-38.122-19.23-49.498-22.69 18.531 31.24 59.459 67.67 84.379 95.1 5.204 5.73 28.422 24.68 29.662 30.51-43.664-36.61-89.807-91.19-125.806-135.28", "f": "#290c3d", "op": null}, {"k": "p", "d": "M960.741 1685.48c-2.972 4.03-35.383 16.91-40.821 16.44 10.668-6.13 28.962-12.28 40.821-16.44", "f": "#40125a", "op": null}, {"k": "o", "d": "M1013.56 511.82c8.08 11.601 29.88 34.897 40.39 46.802l83.63 94.708 349.29 396.65c-2.64 3.06-15.7 18.33-18.26 20.35-16.47 21.04-38.07 43.03-55.99 63.21-16.91 19.06-33.99 38.1-50.97 57.12l-211.58 237.81-85.64 97.19c-4.87 5.5-26.69 30.96-30.82 33.84-2.64 4.16-16.46 20.65-20.62 26.23 1.23-23.49-.05-51.07.56-75.41 2.69-3.61 3.86-4.78 7.1-7.97 1.9-2.91 26.18-29.54 30.11-33.96l76.44-85.65 180.35-203.95c37.47-42.21 79.22-87.09 115.21-130.31l-6.03-7.46c-17.21-18.13-35.39-39.64-51.58-58.732-3.99-2.722-18.91-20.524-22.18-25.099-3.61-2.324-33.07-36.873-37.57-42.288-7.81-7.324-29.67-33.031-37.42-42.173-16.7-19.72-38.54-42.181-54.23-61.978-6.39-6.506-19.08-21.057-24.5-28.227-3.96-2.904-22.29-24.316-26.35-29.085-14.52-17.046-30.33-34.002-44.56-51.175-4.62-3.794-32.38-37.038-37.29-43.119-1.83-1.263-9.57-10.815-11.31-12.962-6.73-7.141-14.95-17.178-21.47-24.762-2.72-2.215-12-13.636-14.68-17.023-6.58-7.261-13.3-14.894-20.07-21.937-.12-23.317.42-47.489.04-70.64", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1013.56 511.82c8.08 11.601 29.88 34.897 40.39 46.802l83.63 94.708 349.29 396.65c-2.64 3.06-15.7 18.33-18.26 20.35l-.64-.66c1.14-2.85 12.37-15.28 15.63-19.41-9.64-12.69-26.63-30.85-37.52-43.15l-76.61-86.387-249.51-284.254-70.44-79.416c-9.35-10.641-25.89-28.484-33.73-39.333-.96 20.664-.81 42.346-.96 63.103 4.45 4.281 17.78 17.974 18.76 23.574-6.58-7.261-13.3-14.894-20.07-21.937-.12-23.317.42-47.489.04-70.64m7.09 990.53c-.2 3.82-2.98 6.43-5.62 9.27-.13 17.41-1.13 50.83.48 66.64 3.43-4.28 13.37-17.23 18.1-18.76-2.64 4.16-16.46 20.65-20.62 26.23 1.23-23.49-.05-51.07.56-75.41 2.69-3.61 3.86-4.78 7.1-7.97m344.5-520.062c1.55.527 3.58 1.358 4.59 2.63 6.93 8.691 46.57 48.612 46.99 56.102-17.21-18.13-35.39-39.64-51.58-58.732m-59.75-67.387 1.8-1.147c6.1 7.201 33.63 36.607 36.03 42.474l-.26.961c-3.61-2.324-33.07-36.873-37.57-42.288m-224.35-255.757 2.84.531c12.33 13.08 23.57 27.526 35.38 41.114l-.93 1.474c-4.62-3.794-32.38-37.038-37.29-43.119m108.2 123.379c6.09 1.369 19.94 19.783 24.06 25.146l.44 3.081c-6.39-6.506-19.08-21.057-24.5-28.227", "f": "#e42f0e", "op": null}, {"k": "o", "d": "M1048.27 621.42c7.16 1.919 16.53 15.573 21.03 21.681l.44 3.081c-6.73-7.141-14.95-17.178-21.47-24.762", "f": "#e42f0e", "op": null}, {"k": "o", "d": "M1279.87 132.011c29.16 10.427 62.16 15.679 89.61 30.258.47.248.95.476 1.41.732 7.52 4.157 78.22 88.058 90.85 102.483l248.92 283.676 163.4 186.383 43.5 50.054c13.86 15.887 23.83 22.951 29.57 43.889 7.37 26.865 10.73 53.801 17.12 80.586-14.72-20.805-38.22-41.251-52.84-60.74-2.76-1.96-15.46-16.786-18.49-20.433-24.66-29.649-53.28-58.308-77.25-88.35a1191 1191 0 0 1-23.68-27.232c-6.75-6.097-21.51-23.999-28.02-31.479a4036 4036 0 0 1-53.36-61.376c-18.9-22.05-44.68-48.772-61.86-70.763-5.79-5.786-16.91-19.676-22.64-26.432-4.34-3.012-27.33-30.641-31.39-35.874-6.71-6.926-16.82-18.678-22.69-26.194-4.14-3.138-32.09-35.747-37.24-41.598a6354 6354 0 0 1-56.42-64.344c-8.21-9.509-19.18-21.614-26.62-31.467a1283 1283 0 0 1-43.61-49.485c-3.13-2.418-13.71-14.674-16.31-17.975-18.2-23.073-42.73-45.517-60.22-68.806-14.17-15.465-36.82-43.885-51.74-55.513", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1279.87 132.011c29.16 10.427 62.16 15.679 89.61 30.258.47.248.95.476 1.41.732 7.52 4.157 78.22 88.058 90.85 102.483l248.92 283.676 163.4 186.383 43.5 50.054c13.86 15.887 23.83 22.951 29.57 43.889 7.37 26.865 10.73 53.801 17.12 80.586-14.72-20.805-38.22-41.251-52.84-60.74 5.69.888 39.37 42.07 47.06 49.636-1.87-22.417-9.58-64.098-19.49-84.666-1.91-3.967-23.13-27.509-27.16-32.142l-63.5-72.897-278.17-316.652-147.3-168.152a2706 2706 0 0 1-30.7-35.795c-3.73-4.363-17.16-20.778-21.29-22.966-21.25-11.268-56.43-21.007-79.3-26.82 5.33 5.114 39.73 44.159 40.05 48.646-14.17-15.465-36.82-43.885-51.74-55.513", "f": "#e42f0e", "op": null}, {"k": "o", "d": "M1408.14 274.305c7.27 1.235 34.93 38.391 42.3 45.293 1.07 1.001 1.36 2.735 1.31 4.192a1283 1283 0 0 1-43.61-49.485m383.85 439.012c5.38 1.09 23.2 21.554 23.68 27.232a1191 1191 0 0 1-23.68-27.232m-219.96-252.118c7.18 3.183 18.23 17.384 22.86 23.954.18 1.882.43 1.177-.17 2.24-6.71-6.926-16.82-18.678-22.69-26.194m54.08 62.068c5.6 1.921 22.93 20.633 22.64 26.432-5.79-5.786-16.91-19.676-22.64-26.432", "f": "#e42f0e", "op": null}, {"k": "o", "d": "M1964.96 1184.85c-7.72 27.47-10.42 68.61-21.96 94.93-2 4.57-17.06 21.28-21.16 25.94l-33.25 37.71-147.25 166.91-241.17 275.42c-19.9 22.63-39.85 45.34-59.87 67.87-14.31 16.1-29.58 35.61-44.38 50.79-12.28 14.36-21.36 27.24-39.98 33.02-3.1.97-6.42 2.85-9.66 3.18-4.63 2.43-17.02 7.42-22.16 8.77-13.01 5.19-29.71 9.74-43.48 14.35 7.49-6.6 15.37-15.27 22.14-22.73 1.8-2.91 13.33-15.68 16.18-18.86l33.64-37.54 108.72-124.31 314.35-359.12 121.83-138.95c22.22-25.37 46.24-51.38 67.46-77.38", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1302.78 1941.01c.09 6.52-6.51 8.51-6.62 13.84 8.07 1.71 19.66-7.8 27.96-5.46-13.01 5.19-29.71 9.74-43.48 14.35 7.49-6.6 15.37-15.27 22.14-22.73m93.14-36.59c-12.28 14.36-21.36 27.24-39.98 33.02-3.1.97-6.42 2.85-9.66 3.18l.29-1.31c6.85-4.54 19.05-7.33 25.64-12.2 8.11-6 14.43-18.03 23.71-22.69", "f": "#e42f0e", "op": null}, {"k": "o", "d": "m1013.27 702.139 7.45 9.542c16.05 16.557 33.52 37.053 49.09 54.414l119.47 135.288 89.83 102.577c10.57 12.18 29.98 32.95 38.93 44.8-1.93 2.19-14.5 16.84-15.54 17.59-3.42 5.48-17.14 20.66-21.8 26.01l-51.54 58.42-133.15 150.91c-27.71 31.31-57.54 63.77-83.8 96.16 1.76-20-1.04-51.65.31-74.47 3.59-5.74 15.48-18.6 20.54-24.32l39.39-44.53 144.87-163.98c6.75-7.68 36.36-39.21 38.91-45.28-8.16-6.35-27.95-30.2-35.12-38.8-6.12-5.27-35.98-40.059-43.16-48.128l-29.24-32.777c-3.76-4.195-12.3-13.168-15.04-17.495-8.34-7.866-20.82-22.938-28.49-31.791-12.32-12.224-42.38-45.958-53.41-59.553-6.4-6.438-18.19-20.312-23.86-27.457-4.73-4.826-10.5-12.089-14.97-17.416z", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1315.5 1048.55c-14.86-14.74-40.05-45.22-54.41-61.778l-96.88-110.778-89.48-101.087c-14.24-15.803-42.75-45.736-54.87-61.88l.86-1.346c16.05 16.557 33.52 37.053 49.09 54.414l119.47 135.288 89.83 102.577c10.57 12.18 29.98 32.95 38.93 44.8-1.93 2.19-14.5 16.84-15.54 17.59l-.53-1.28c4.45-6.09 8.58-10.82 13.53-16.52m-94.39-42.08c6.13 2.71 33.96 32.68 35.12 38.8-8.16-6.35-27.95-30.2-35.12-38.8m-115.93-130.191c6.66 1.363 26.47 25.025 28.49 31.791-8.34-7.866-20.82-22.938-28.49-31.791m-77.27-87.01c7.09 1.811 19.05 18.234 23.51 24.348l.35 3.109c-6.4-6.438-18.19-20.312-23.86-27.457", "f": "#e42f0e", "op": null}, {"k": "p", "d": "M1002.72 240.588c-1.23 10.178-.67 22.055-.84 32.402-.32 20.394.53 41.506-.04 61.847.56 17.671.31 36.06.32 53.793-71.499 73.342-133.1 186.968-151.762 288.176-5.628 30.519-6.807 59.335-6.425 90.229a596.5 596.5 0 0 0 8.718 91.816c2.113 12.007 6.091 26.404 7.765 37.458 3.261 10.23 6.501 21.873 10.126 31.807-5.855-7.634-11.14-19.509-15.185-28.375-3.595-6.139-9.403-21.036-12.15-27.961-22.518-56.761-38.258-132.139-38.151-193.224a561.9 561.9 0 0 1 101.385-324.304c8.865-12.76 27.937-39.693 38.794-50.547a791 791 0 0 1 57.445-63.117", "f": "#692184", "op": null}, {"k": "p", "d": "M1002.72 240.588c-1.23 10.178-.67 22.055-.84 32.402-.32 20.394.53 41.506-.04 61.847-.75-4.986-.48-26.369-.4-32.208.28-19.981-.03-37.087-1.21-57.023l-16.182 17.28c-3.246 3.116-4.782 4.642-7.522 8.185l-1.111 1.288c-2.802 2.941-6.605 6.679-9.042 9.783-3.909 4.454-16.795 20.874-21.098 21.563a791 791 0 0 1 57.445-63.117M860.456 896.309c3.261 10.23 6.501 21.873 10.126 31.807-5.855-7.634-11.14-19.509-15.185-28.375l.736-.992c3.429 3.256 1.642 5.815 4.636 7.631.225-2.479-.98-6.287-1.485-8.944z", "f": "#290c3d", "op": null}, {"k": "p", "d": "M975.415 272.359c-1.366 3.262-6.198 7.671-9.042 9.783 2.437-3.104 6.24-6.842 9.042-9.783m8.633-9.473c-.99 2.739-5.172 6.287-7.522 8.185 2.74-3.543 4.276-5.069 7.522-8.185", "f": "#40125a", "op": null}, {"k": "p", "d": "M682.558 1928.09c34.498-2.34 72.7-4.07 106.891-8.56a756.7 756.7 0 0 0 161.054-40.65c14.938-5.55 40.258-14.74 51.667-25.24-.18 42.79-.74 87.91.08 130.64-8.962 4.23-16.2 7.58-23.873 13.97-25.343-3.13-50.815-4.41-76.225-7.87a989 989 0 0 1-232.114-59.86c-2.47-.8-1.543-.04-3.135-1.86 4.354-1.19 10.939-.67 15.655-.57", "f": "#692184", "op": null}, {"k": "p", "d": "M670.038 1930.52c-2.47-.8-1.543-.04-3.135-1.86 4.354-1.19 10.939-.67 15.655-.57-4.292 1.26-9.297 1.12-12.52 2.43", "f": "#40125a", "op": null}, {"k": "o", "d": "M1013.59 888.827c9.14 12.215 27.42 31.429 38.14 43.409l65.14 73.344c11.86 13.33 26.35 28.43 37.37 42.16l.48 1.97-77.89 87.26c-10.33 11.62-26.38 31.33-36.98 41.42-3.04 3.5-25.04 29.44-26.27 29.92-.83-3.91-.41-7.56-.23-11.58q-.315-30.99-.3-61.98c24.56-29.46 54.74-58.63 79.13-88.64-4.58-2.63-9.66-8.75-13.29-12.82-1.62-1.31-11.71-12.71-13.39-14.62-10.5-11.84-22.12-24.247-31.79-36.771a618 618 0 0 0-20.52-22.193c.18-23.115.79-47.901.4-70.879", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1013.59 888.827c9.14 12.215 27.42 31.429 38.14 43.409l65.14 73.344c11.86 13.33 26.35 28.43 37.37 42.16l-.86.64c-11.01-9.28-40.46-43.9-51.71-56.685l-86.07-96.937c-1.35 15.955-.91 46.184-.78 62.655 5.15 6.957 18.61 16.832 18.89 24.486a618 618 0 0 0-20.52-22.193c.18-23.115.79-47.901.4-70.879m-.24 307.903c1.76-3.1 1.2-10.04 1.12-14.08l-.03-1.37c.05 2.2.12 4.41.21 6.61.16 3.84-.03 8.83 2.87 11.49 4.77-1.63 15.47-19.27 22.33-20.99-3.04 3.5-25.04 29.44-26.27 29.92-.83-3.91-.41-7.56-.23-11.58m65.54-163.44c3.92.51 12.46 8.99 13.29 12.82-4.58-2.63-9.66-8.75-13.29-12.82", "f": "#e42f0e", "op": null}, {"k": "o", "d": "M1851.3 1501.84c4.73-5.67 11.34-14.13 16.68-18.83l-15.58 28.12c-5.74 12.13-17.85 31.2-25.08 42.72a953.8 953.8 0 0 1-154.76 187.28c-4.3 4.02-20.36 20.11-23.81 21.92-10.03 9.63-53.3 45.51-64.43 51.59l-9.52 7.61-.03-4.53c13.89-18.31 33.63-39.74 48.95-57.17l69.68-79.39c39.87-44.98 79.89-93.65 120.58-137.35 5.11-6.1 10.66-12.08 16.01-18 4.69-6.3 15.67-17.77 21.31-23.97", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1584.32 1814.64c.51-1.5.44-1.85 1.53-2.93 3.96-3.92 8.4-7.34 12.8-10.75 15.88-12.3 31.74-24.64 47.01-37.69 1.03-.07 2.06-.15 3.09-.22-10.03 9.63-53.3 45.51-64.43 51.59m266.98-312.8c4.73-5.67 11.34-14.13 16.68-18.83l-15.58 28.12-1.2-.09.01-1.36c1.75-2.6 2.84-3.66 3.02-6.78zm-21.31 23.97c.44 5.75-10.09 16.96-16.01 18 5.11-6.1 10.66-12.08 16.01-18", "f": "#e42f0e", "op": null}, {"k": "o", "d": "m1591.34 291.188 1.05-1.243c2.11.181 3.47.436 5.56.83l2.24 1.641c92.93 67.332 194.7 189.001 249.71 288.986 4.91 8.932 15.99 28.522 19.61 37.32-18.3-22.643-36.35-42.567-55.42-64.533l-63.34-73.607c-15.3-17.538-39.86-43.827-53.26-61.992-3.45-2.326-7.31-7.512-9.94-10.872-34.03-36.113-67.63-80.774-101.23-116.413z", "f": "#fc591f", "op": null}, {"k": "o", "d": "M1600.19 292.416c92.93 67.332 194.7 189.001 249.71 288.986 4.91 8.932 15.99 28.522 19.61 37.32-18.3-22.643-36.35-42.567-55.42-64.533l-63.34-73.607c-15.3-17.538-39.86-43.827-53.26-61.992 9.19 3.368 130.46 152.076 152.57 172.156.95-4.969-14.06-29.818-17.33-35.047a1033 1033 0 0 0-167.32-205.168c-20.27-19.18-41.2-36.163-62.7-53.864-1.49-1.233-2.08-2.368-2.52-4.251", "f": "#e42f0e", "op": null}, {"k": "o", "d": "m1586.32 291.305 5.02-.117c11.79 16.834 95.89 110.653 96.21 116.53-34.03-36.113-67.63-80.774-101.23-116.413", "f": "#e42f0e", "op": null}, {"k": "p", "d": "M983.33 582.759c5.768-11.884 13.233-24.318 19.87-35.878-1.07 7.847-1.16 14.356-1.36 22.291.78 21.11.43 45.451.25 66.742-29.948 40.93-51.176 73.891-68.077 122.283 5.103-54.783 14.524-98.572 36.81-149.483 2.193-5.009 9.773-22.39 12.507-25.955", "f": "#692184", "op": null}, {"k": "p", "d": "M983.33 582.759c5.768-11.884 13.233-24.318 19.87-35.878-1.07 7.847-1.16 14.356-1.36 22.291-1.66-3.42-1.62-5.462-1.952-9.261l-.998-.702c-5.754 4.982-9.823 21.716-15.56 23.55", "f": "#290c3d", "op": null}, {"k": "o", "d": "M1577.48 275.55c6.6 4.756 14.33 10.039 20.47 15.225-2.09-.394-3.45-.649-5.56-.83l-1.05 1.243-5.02.117c-3.33-3.059-8.55-9.256-11.76-12.866z", "f": "#e42f0e", "op": null}, {"k": "p", "d": "m861.24 1242.41 1.249-.73c2.35-.04 1.907.42 3.499-1.33l-1.979-.22-.415-.53.511-1.97c13.876 5.85 28.581 9.72 41.453 15.32-13.457-2.11-30.897-6.91-44.318-10.54m44.161-125.49c9.001 7.29 17.464 13.05 26.987 19.61-11.864-4.59-21.258-10.18-32.462-15.03zm69.47 313.4c8.967-1.94 19.938-4.63 28.829-6.12l-21.36 9.26c-3.135-6.7.085.46-7.469-3.14", "f": "#290c3d", "op": null}, {"k": "x", "d": "M1574.56 278.439c-4.87-5.626-11.83-12.544-17.08-18.196 6.58 4.568 13.62 10.324 20 15.307zm.21 1539.281.03 4.53c-2.33 1.93-2.69 2.58-5.64 3.25.64-3.11 3.33-5.32 5.61-7.78", "f": "#be2a0b", "op": null}, {"k": "x", "d": "M946.931 1335.82c3.491-.81 2.209-1.24 4.594-.03-1.761.9-1.34.88-3.219 1.23z", "f": "#b5aeb5", "op": null}, {"k": "x", "d": "m96.156 1452.32 1.418.15 2.271 6.17c-3.496-2.33-3.013-2.52-3.689-6.32", "f": "#b66c69", "op": ".459"}, {"k": "x", "d": "M2021.74 1217.21c.61-3.46.73-6.56 2.81-9.28 1.36 3.04.64 4.51.28 8.21z", "f": "#be2a0b", "op": ".871"}];
+  const LOOP = 15, CX = 1024, CY = 1024, NS = 'http://www.w3.org/2000/svg';
+  const clamp = (v,a=0,b=1) => Math.max(a, Math.min(b, v));
+  const eOut = p => 1 - Math.pow(1 - p, 3);
+  const smooth = x => x * x * (3 - 2 * x);
+  const eArrow = p => p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;
+  const heroPlace = (el, dx, dy, rot, s, op) => {
+    if (op <= 0) { el.setAttribute('opacity', 0); return; }
+    el.setAttribute('opacity', op.toFixed(3));
+    el.setAttribute('transform', `translate(${dx.toFixed(2)} ${dy.toFixed(2)}) rotate(${rot.toFixed(2)} ${CX} ${CY}) translate(${CX} ${CY}) scale(${s.toFixed(4)}) translate(${-CX} ${-CY})`);
+  };
+
+  const heroParts = document.getElementById('heroParts');
+  const heroSurgeEl = document.getElementById('heroSurge');
+  let hpi = 0, hoi = 0, hxi = 0;
+  const heroItems = DATA.map(d => {
+    const el = document.createElementNS(NS, 'path');
+    el.setAttribute('d', d.d);
+    el.setAttribute('fill', d.f);
+    if (d.op) el.setAttribute('fill-opacity', d.op);
+    heroParts.appendChild(el);
+    const o = { el, k: d.k };
+    if (d.k === 'p') {
+      const i = hpi++;
+      o.a0 = i * 2.399 + 0.3;
+      o.spin = (2.6 + (i % 3) * 0.7) * Math.PI * (i % 2 ? 1 : -1);
+      o.rot = (i % 2 ? 1 : -1) * (60 + (i % 4) * 22);
+      o.R = 1450 + (i % 3) * 170;
+      o.start = 0.35 + i * 0.06;
+      o.dur = 1.9;
+    } else if (d.k === 'o') {
+      const i = hoi++;
+      o.dir = [-1, 0];
+      o.D = 1100 + (i % 2) * 120;
+      o.start = 0.9 + i * 0.1;
+      o.dur = 1.3;
+      o.ghosts = [0, 1].map(() => {
+        const g = document.createElementNS(NS, 'path');
+        g.setAttribute('d', d.d); g.setAttribute('fill', d.f); g.setAttribute('opacity', 0);
+        heroParts.insertBefore(g, el);
+        return g;
+      });
+    } else {
+      const i = hxi++;
+      o.start = 1.7 + i * 0.02;
+      o.dur = 0.9;
+    }
+    return o;
+  });
+  {
+    const P = heroItems.filter(o => o.k === 'p'), O = heroItems.filter(o => o.k === 'o');
+    P.forEach((o, i) => { o.start = 0.2 + (P.length > 1 ? i / (P.length - 1) : 0) * 1.3; o.dur = 1.5; });
+    O.forEach((o, i) => { o.start = 0.6 + (O.length > 1 ? i / (O.length - 1) : 0) * 1.4; o.dur = 1.1; });
+  }
+
+  // Wordmark letters (reuses the existing brand title / subtitle / divider)
+  const heroWm = document.getElementById('brandTitle');
+  const heroLetters = heroWm.textContent.trim().split('');
+  heroWm.textContent = '';
+  const heroSpans = heroLetters.map(ch => { const s = document.createElement('span'); s.textContent = ch; if (ch === 'X') s.className = 'jx-x'; heroWm.appendChild(s); return s; });
+
+  const heroCv = document.getElementById('sec1Canvas'), heroCtx = heroCv.getContext('2d');
+  let HW = 0, HH = 0, HDPR = 1;
+  function heroResize(){
+    HDPR = Math.min(window.devicePixelRatio || 1, 2);
+    HW = heroCv.parentElement.clientWidth; HH = heroCv.parentElement.clientHeight;
+    heroCv.width = HW * HDPR; heroCv.height = HH * HDPR;
+    heroCtx.setTransform(HDPR, 0, 0, HDPR, 0, 0);
+  }
+  addEventListener('resize', heroResize); heroResize();
+
+  const HPARTS = Array.from({length: 150}, (_, i) => ({
+    a: Math.random() * Math.PI * 2,
+    f: Math.random(),
+    s: 0.05 + Math.random() * 0.12,
+    z: Math.random() < 0.5 ? 0 : (Math.random() < 0.5 ? 1 : 2)
+  }));
+  const HCOL = ['#fc591f', '#9333ea', '#00e5ff', '#ffffff'];
+
+  function heroDrawBG(T, surgeB){
+    const cx = HW/2, cy = HH/2;
+    const L = Math.min(HW, HH) * 0.74;
+    const g = heroCtx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(HW,HH)*0.7);
+    g.addColorStop(0, '#1a0c2c'); g.addColorStop(0.5, '#0c0617'); g.addColorStop(1, '#050209');
+    heroCtx.fillStyle = g; heroCtx.fillRect(0, 0, HW, HH);
+
+    const hor = HH * 0.8, vx = cx;
+    heroCtx.lineWidth = 1;
+    for (let k = 0; k < 14; k++){
+      const z = ((k + (T * 0.35) % 1) / 14);
+      const y = hor + (HH - hor) * z * z;
+      heroCtx.strokeStyle = `rgba(252,89,31,${0.05 + 0.12*z})`;
+      heroCtx.beginPath(); heroCtx.moveTo(0, y); heroCtx.lineTo(HW, y); heroCtx.stroke();
+    }
+    for (let j = -12; j <= 12; j++){
+      heroCtx.strokeStyle = 'rgba(147,51,234,0.10)';
+      heroCtx.beginPath(); heroCtx.moveTo(vx, hor); heroCtx.lineTo(vx + j * HW * 0.12, HH); heroCtx.stroke();
+    }
+
+    const a = L * 0.5, ia = clamp(T / 1.5);
+    heroCtx.save(); heroCtx.translate(cx, cy); heroCtx.rotate(Math.sin(T*0.15)*0.08);
+    const lg = heroCtx.createLinearGradient(-a, 0, a, 0);
+    lg.addColorStop(0, 'rgba(147,51,234,0.0)'); lg.addColorStop(0.5, 'rgba(252,89,31,0.5)'); lg.addColorStop(1, 'rgba(0,229,255,0.0)');
+    heroCtx.strokeStyle = lg; heroCtx.lineWidth = 1.2; heroCtx.globalAlpha = 0.45 * ia;
+    heroCtx.beginPath();
+    for (let i = 0; i <= 240; i++){
+      const th = i / 240 * Math.PI * 2;
+      const d = 1 + Math.sin(th)**2;
+      const x = a * Math.cos(th) / d, y = a * Math.sin(th) * Math.cos(th) / d * 0.9;
+      i ? heroCtx.lineTo(x, y) : heroCtx.moveTo(x, y);
+    }
+    heroCtx.stroke();
+    const th = T * 0.7, d = 1 + Math.sin(th)**2;
+    const tx = a * Math.cos(th) / d, ty = a * Math.sin(th) * Math.cos(th) / d * 0.9;
+    heroCtx.globalAlpha = ia;
+    const tg = heroCtx.createRadialGradient(tx, ty, 0, tx, ty, 14);
+    tg.addColorStop(0, '#fff'); tg.addColorStop(0.3, 'rgba(252,89,31,.9)'); tg.addColorStop(1, 'rgba(252,89,31,0)');
+    heroCtx.fillStyle = tg; heroCtx.beginPath(); heroCtx.arc(tx, ty, 14, 0, Math.PI*2); heroCtx.fill();
+    heroCtx.restore();
+
+    const sc = 0.6 + 0.4 * eOut(clamp(T / 1.5));
+    const rings = [
+      { rx: 0.55, ry: 0.17, rot: -0.26 + T*0.22, col: 'rgba(147,51,234,', dash: [14,10] },
+      { rx: 0.47, ry: 0.14, rot: 0.44 - T*0.30, col: 'rgba(252,89,31,',  dash: [8,6] },
+      { rx: 0.38, ry: 0.11, rot: -0.7 + T*0.40, col: 'rgba(0,229,255,',  dash: [5,5] },
+    ];
+    rings.forEach(r => {
+      heroCtx.save(); heroCtx.translate(cx, cy); heroCtx.rotate(r.rot);
+      heroCtx.setLineDash(r.dash); heroCtx.lineWidth = 1.3;
+      heroCtx.strokeStyle = r.col + (0.25 + 0.35*surgeB) + ')';
+      heroCtx.beginPath(); heroCtx.ellipse(0, 0, L*r.rx*sc, L*r.ry*sc, 0, 0, Math.PI*2); heroCtx.stroke();
+      heroCtx.restore();
+    });
+    heroCtx.setLineDash([]);
+
+    const cr = L * 0.45 * (0.85 + 0.15*Math.sin(T*3)) * (0.6 + 0.4*ia);
+    const cg = heroCtx.createRadialGradient(cx, cy, 0, cx, cy, cr);
+    cg.addColorStop(0, `rgba(255,255,255,${0.35 + 0.5*surgeB})`);
+    cg.addColorStop(0.3, `rgba(252,89,31,${0.25 + 0.3*surgeB})`);
+    cg.addColorStop(0.7, 'rgba(124,36,166,0.12)');
+    cg.addColorStop(1, 'rgba(18,4,36,0)');
+    heroCtx.fillStyle = cg; heroCtx.beginPath(); heroCtx.arc(cx, cy, cr, 0, Math.PI*2); heroCtx.fill();
+
+    HPARTS.forEach(p => {
+      const f = (p.f + T * p.s * 0.25) % 1;
+      const r = L * 0.78 * Math.pow(1 - f, 1.4) + 3;
+      const ang = p.a + T * 0.35 * (p.z === 1 ? -1 : 1) * (0.5 + p.s);
+      const x = cx + Math.cos(ang) * r, y = cy + Math.sin(ang) * r * 0.55;
+      const al = Math.sin(f * Math.PI) * (0.5 + 0.5*surgeB) * ia;
+      heroCtx.fillStyle = HCOL[p.z === 0 ? 0 : p.z === 1 ? 1 : 2];
+      heroCtx.globalAlpha = al;
+      heroCtx.beginPath(); heroCtx.arc(x, y, 1 + (1-f)*1.8, 0, Math.PI*2); heroCtx.fill();
+    });
+    heroCtx.globalAlpha = 1;
+  }
+
+  const heroLogoG = document.getElementById('heroLogoG');
+  const heroBarEl = document.getElementById('heroBar');
+  const heroTagEl = document.getElementById('brandSubtitle');
+  function heroSetLogo(t, sB){
+    heroItems.forEach(o => {
+      if (o.k === 'p'){
+        const p = clamp((t - o.start) / o.dur);
+        const e = eOut(p);
+        const ang = o.a0 + o.spin * (1 - e);
+        const rf = 1 - smooth(clamp((p - 0.55) / 0.45));
+        const r = o.R * rf;
+        heroPlace(o.el, Math.cos(ang) * r, Math.sin(ang) * r, o.rot * (1 - e), 0.5 + 0.5 * e, Math.min(1, p * 3));
+      } else if (o.k === 'o'){
+        const p = clamp((t - o.start) / o.dur);
+        const e = eArrow(p);
+        const off = o.D * (1 - e);
+        heroPlace(o.el, o.dir[0] * off, o.dir[1] * off, 0, 0.7 + 0.3 * e, Math.min(1, p * 5));
+        o.ghosts.forEach((g, gi) => {
+          const lag = (gi + 1) * 0.07;
+          const pg = clamp((t - o.start - lag) / o.dur);
+          const eg = eArrow(pg);
+          const offg = o.D * (1 - eg);
+          const base = gi ? 0.16 : 0.32;
+          heroPlace(g, o.dir[0] * offg, o.dir[1] * offg, 0, 0.7 + 0.3 * eg, Math.min(1, pg * 5) * base * (1 - pg));
+        });
+      } else {
+        const p = clamp((t - o.start) / o.dur);
+        heroPlace(o.el, 0, 0, 0, 0.4 + 0.6 * eOut(p), p);
+      }
+    });
+    const sp = clamp((t - 2.9) / 0.9);
+    if (sp > 0 && sp < 1){
+      heroSurgeEl.setAttribute('r', (80 + sp * 1150).toFixed(1));
+      heroSurgeEl.setAttribute('stroke-width', (14 * (1 - sp) + 2).toFixed(1));
+      heroSurgeEl.setAttribute('opacity', (Math.sin(sp * Math.PI) * 0.9).toFixed(3));
+    } else heroSurgeEl.setAttribute('opacity', 0);
+    const live = clamp((t - 4.0) / 0.8);
+    const fl = Math.sin((t - 4) * 1.4) * 1.2 * live;
+    const br = (1 + 0.008 * Math.sin(t * 2) * live);
+    heroLogoG.setAttribute('transform',
+      `translate(0 ${(Math.sin((t-4)*1.4)*8*live).toFixed(2)}) rotate(${fl.toFixed(2)} ${CX} ${CY}) translate(${CX} ${CY}) scale(${br.toFixed(4)}) translate(${-CX} ${-CY})`);
+    const flashEl = document.getElementById('flash');
+    if (flashEl) flashEl.style.opacity = (sp > 0 && sp < 1 ? Math.sin(sp*Math.PI)*0.45 : 0).toFixed(3);
+    heroSpans.forEach((s, i) => {
+      const p = clamp((t - 3.6 - i * 0.07) / 0.35);
+      s.style.opacity = p.toFixed(3);
+      s.style.transform = `translateY(${((1 - p) * 12).toFixed(2)}px)`;
+    });
+    if (heroBarEl) heroBarEl.style.opacity = clamp((t - 4.2) / 0.6).toFixed(3);
+    if (heroTagEl) heroTagEl.style.opacity = clamp((t - 4.5) / 0.8).toFixed(3);
+  }
+
+  let hT = 0, hRunning = true, hLast = null;
+  const hReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function heroFrame(now){
+    if (hLast === null) hLast = now;
+    const dt = Math.min(0.1, (now - hLast) / 1000); hLast = now;
+    if (hRunning && !hReduce) hT += dt;
+    const tl = hReduce ? 5 : (hT % LOOP);
+    const surgeB = (tl > 2.9 && tl < 3.8) ? Math.sin((tl-2.9)/0.9*Math.PI) : 0;
+    heroCtx.clearRect(0, 0, HW, HH);
+    heroDrawBG(hT, surgeB);
+    heroSetLogo(tl, surgeB);
+    requestAnimationFrame(heroFrame);
+  }
+  const btnHeroToggle = document.getElementById('btnHeroToggle');
+  btnHeroToggle.addEventListener('click', () => {
+    hRunning = !hRunning; btnHeroToggle.textContent = hRunning ? 'Pause' : 'Play';
+  });
+  document.getElementById('btnHeroReplay').addEventListener('click', () => {
+    hT = 0; hRunning = true; btnHeroToggle.textContent = 'Pause';
+  });
+  if (hReduce){ hRunning = false; btnHeroToggle.textContent = 'Play'; }
+  requestAnimationFrame(heroFrame);
+
+  document.getElementById('btnTheme').addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+  });
+
+  // SECTION 2: WebGL Fluid-Like Canvas & Kinetic Variable Font Dynamics
+  const c2 = document.getElementById('sec2Canvas');
+  const ctx2 = c2.getContext('2d');
+  let pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+  function resizeC2() {
+    c2.width = window.innerWidth;
+    c2.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeC2);
+  resizeC2();
+
+  window.addEventListener('mousemove', (e) => {
+    const rect = c2.getBoundingClientRect();
+    pointer.targetX = e.clientX - rect.left;
+    pointer.targetY = e.clientY - rect.top;
+  });
+
+  let time = 0;
+  function animC2() {
+    ctx2.fillStyle = 'rgba(2, 0, 5, 0.2)';
+    ctx2.fillRect(0, 0, c2.width, c2.height);
+
+    pointer.x += (pointer.targetX - pointer.x) * 0.08;
+    pointer.y += (pointer.targetY - pointer.y) * 0.08;
+
+    time += 0.02;
+
+    const cols = 28;
+    const rows = 16;
+    const cellW = c2.width / cols;
+    const cellH = c2.height / rows;
+
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const x = i * cellW + cellW / 2;
+        const y = j * cellH + cellH / 2;
+
+        const dist = Math.hypot(pointer.x - x, pointer.y - y);
+        const maxDist = 320;
+        const factor = Math.max(0, 1 - dist / maxDist);
+
+        const wave = Math.sin(time + i * 0.3 + j * 0.3) * 12;
+        const radius = 2 + factor * 14 + Math.abs(wave) * 0.2;
+
+        ctx2.beginPath();
+        ctx2.arc(x + wave, y + Math.cos(time + i * 0.2) * 8, radius, 0, Math.PI * 2);
+
+        if (factor > 0.1) {
+          ctx2.fillStyle = `rgba(252, 89, 31, ${0.15 + factor * 0.65})`;
+        } else {
+          ctx2.fillStyle = `rgba(105, 33, 132, ${0.08 + Math.abs(wave) * 0.01})`;
+        }
+        ctx2.fill();
+      }
+    }
+
+    requestAnimationFrame(animC2);
+  }
+  animC2();
+
+  const rows = document.querySelectorAll('.kinetic-row');
+  window.addEventListener('mousemove', (e) => {
+    const mouseY = e.clientY;
+
+    rows.forEach((row) => {
+      const rect = row.getBoundingClientRect();
+      const rowCenterY = rect.top + rect.height / 2;
+      const distY = Math.abs(mouseY - rowCenterY);
+
+      const maxDist = 200;
+      if (distY < maxDist) {
+        const ratio = 1 - distY / maxDist;
+        const fillAlpha = ratio * 0.95;
+        const letterSpacing = (ratio * 0.08).toFixed(3);
+        
+        row.style.color = `rgba(252, 89, 31, ${fillAlpha})`;
+        row.style.webkitTextStroke = `1.5px rgba(255, 255, 255, ${1 - ratio * 0.5})`;
+        row.style.letterSpacing = `${letterSpacing}em`;
+        row.style.transform = `scale(${1 + ratio * 0.04})`;
+      } else {
+        row.style.color = 'transparent';
+        row.style.webkitTextStroke = '1.5px rgba(255, 255, 255, 0.85)';
+        row.style.letterSpacing = '-0.02em';
+        row.style.transform = 'scale(1)';
+      }
+    });
+  });
+</script>
+</body>
+</html>
